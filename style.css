@@ -1,0 +1,33 @@
+.grower {
+    background-color: rgb(182, 182, 182);
+    transition: transform 0.3s ease;
+    padding: 5px;
+    border-radius: 10%;
+}
+
+.grower:hover,
+.grower:active {
+    cursor: pointer;
+    transform: scale(1.2);
+    background-color: rgb(138, 138, 138);
+    transition: transform 0.3s ease, background-color 0.5s ease;
+}
+
+.info {
+    display: none;
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgb(219, 219, 219);
+    padding: .35rem 1.1rem;
+    color: white;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+
+
+.grower:hover+.info,
+.grower:active+.info {
+    display: block;
+}
