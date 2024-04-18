@@ -23,16 +23,34 @@ function setImage() {
 function setInfo(index) {
     let info = document.createElement("div");
     info.className = "info";
-    info.id = `${index}`
-    info.innerText = `Computador ${info.id}\nMemória RAM: 0GB\nProcessador: processador`
+    if (index < 10) {
+        info.innerText = `Computador ${info.id}\nMemória RAM: 16GB\nProcessador: Ryzen 5600g`
+    } else {
+        info.innerText = `Computador ${info.id}\nMemória RAM: 4GB\nProcessador: ???`
+    }
     return info;
 }
 
-function setItem(img, info) {
+function addBtn(id) {
+    let btn = document.createElement("button");
+    btn.className = "btn btn-primary";
+    btn.innerText = "Agendar";
+    btn.id = `btn_${id}`;
+    btn.onclick = function () {
+        document.getElementById("popup").style.display = "block";
+        // document.getElementById("popup").children[0].innerText.replace("#", `${btn.id}`);
+        document.getElementById("popup").children[0].value = id
+    }
+    return btn;
+}
+
+function setItem(img, info, btn, index) {
     let item = document.createElement("div");
     item.className = "col-sm-5 col-md-2 mb-4";
+    item.id = index;
     item.appendChild(img);
     item.appendChild(info);
+    item.appendChild(btn);
     item.onclick = function () {
         console.log("hello world")
     }
@@ -47,9 +65,11 @@ function generateComputers() {
         row.className = "row mb-5 mt-5 justify-content-around";
         for (let j = 0; j < 6; j++) {
             let img = setImage();
-            let info = setInfo(index++);
-            let item = setItem(img, info);
+            let info = setInfo(index);
+            let btn = addBtn(index);
+            let item = setItem(img, info, btn, index);
             row.appendChild(item);
+            index++;
         }
         document.getElementById("container0").appendChild(row);
     }
@@ -57,4 +77,19 @@ function generateComputers() {
 
 }
 
+function submit() {
+    let value = document.getElementById("popup").children[0].value
+    console.log(value);
+    document.getElementById(value).children[0].className += " red";
+    document.getElementById(`btn_${value}`).disabled = true;
+    document.getElementById("popup").style.display = "none";
+    // document.getElementById("popup").children[0].innerText.replace(`${value}`, "#");
+}
+
 window.addEventListener('load', generateComputers);
+// fecha o popup quando clica fora dele
+window.onclick = function (event) {
+    if (event.target == document.getElementById("popup")) {
+        document.getElementById("popup").style.display = "none";
+    }
+}

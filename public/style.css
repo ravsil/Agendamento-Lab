@@ -13,6 +13,15 @@
     transition: transform 0.3s ease, background-color 0.5s ease;
 }
 
+.red {
+    background-color: rgb(219, 142, 142) !important;
+}
+
+.red:hover,
+.red:active {
+    background-color: rgb(219, 100, 100) !important;
+}
+
 .info {
     display: none;
     position: absolute;
@@ -30,4 +39,44 @@
 .grower:hover+.info,
 .grower:active+.info {
     display: block;
+}
+
+button {
+    padding: 1rem 2rem;
+    margin: 1.4rem 0.2rem;
+    transform: translateX(45%);
+}
+
+#popup {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.popup_content {
+    background-color: rgb(219, 219, 219);
+    margin: 15% auto;
+    padding: 20px;
+    width: 20%;
+    border-radius: 5px;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
