@@ -1,7 +1,7 @@
 .grower {
     background-color: rgb(182, 182, 182);
     transition: transform 0.3s ease;
-    padding: 5px;
+    padding: 0.313rem;
     border-radius: 10%;
 }
 
@@ -25,16 +25,24 @@
 .info {
     display: none;
     position: absolute;
-    top: -50%;
+    top: -52%;
     left: 50%;
     transform: translateX(-50%);
     background-color: rgb(219, 219, 219);
-    padding: .35rem 1.1rem;
+    padding: 0.35rem 1.1rem;
     color: white;
-    border-radius: 5px;
+    border-radius: 0.313rem;
     white-space: nowrap;
+    overflow: hidden;
 }
 
+.left {
+    left: 95% !important;
+}
+
+.right {
+    left: 0% !important;
+}
 
 .grower:hover+.info,
 .grower:active+.info {
@@ -42,9 +50,9 @@
 }
 
 button {
-    padding: 1rem 2rem;
     margin: 1.4rem 0.2rem;
-    transform: translateX(45%);
+    display: flex;
+    justify-content: center;
 }
 
 #popup {
@@ -62,16 +70,22 @@ button {
 .popup_content {
     background-color: rgb(219, 219, 219);
     margin: 15% auto;
-    padding: 20px;
-    width: 20%;
-    border-radius: 5px;
+    padding: 1.25rem;
+    width: 15rem;
+    border-radius: 0.313rem;
     animation-name: animatetop;
     animation-duration: 0.4s
 }
 
+@media (max-width: 500px) {
+    .popup_content {
+        margin: 50% auto;
+    }
+}
+
 @keyframes animatetop {
     from {
-        top: -300px;
+        top: -18.75rem;
         opacity: 0
     }
 

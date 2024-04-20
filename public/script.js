@@ -22,11 +22,20 @@ function setImage() {
 
 function setInfo(index) {
     let info = document.createElement("div");
-    info.className = "info";
-    if (index < 10) {
-        info.innerText = `Computador ${info.id}\nMemória RAM: 16GB\nProcessador: Ryzen 5600g`
+
+    // jeito feio de arrumar os elementos no mobile
+    if (index % 3 == 0 && window.innerWidth < 500) {
+        info.className = "info left";
+    } else if (index % 3 == 2 && window.innerWidth < 500) {
+        info.className = "info right";
     } else {
-        info.innerText = `Computador ${info.id}\nMemória RAM: 4GB\nProcessador: ???`
+        info.className = "info";
+    }
+
+    if (index < 10) {
+        info.innerText = `Computador ${index}\nMemória RAM: 16GB\nProcessador: Ryzen 5600g`
+    } else {
+        info.innerText = `Computador ${index}\nMemória RAM: 4GB\nProcessador: ???`
     }
     return info;
 }
@@ -38,7 +47,7 @@ function addBtn(id) {
     btn.id = `btn_${id}`;
     btn.onclick = function () {
         document.getElementById("popup").style.display = "block";
-        // document.getElementById("popup").children[0].innerText.replace("#", `${btn.id}`);
+        document.getElementById("title").innerText = `Agendamento para o computador ${id}`
         document.getElementById("popup").children[0].value = id
     }
     return btn;
@@ -46,7 +55,7 @@ function addBtn(id) {
 
 function setItem(img, info, btn, index) {
     let item = document.createElement("div");
-    item.className = "col-sm-5 col-md-2 mb-4";
+    item.className = "col-4 col-md-2";
     item.id = index;
     item.appendChild(img);
     item.appendChild(info);
@@ -81,12 +90,13 @@ function submit() {
     let value = document.getElementById("popup").children[0].value
     console.log(value);
     document.getElementById(value).children[0].className += " red";
+    document.getElementById(value).children[1].className += " red";
     document.getElementById(`btn_${value}`).disabled = true;
     document.getElementById("popup").style.display = "none";
-    // document.getElementById("popup").children[0].innerText.replace(`${value}`, "#");
 }
 
 window.addEventListener('load', generateComputers);
+
 // fecha o popup quando clica fora dele
 window.onclick = function (event) {
     if (event.target == document.getElementById("popup")) {
