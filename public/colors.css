@@ -1,0 +1,17 @@
+.red {
+    background-color: rgb(219, 142, 142) !important;
+}
+
+.red:hover,
+.red:active {
+    background-color: rgb(219, 100, 100) !important;
+}
+
+.yellow {
+    background-color: rgb(219, 205, 142) !important;
+}
+
+.yellow:hover,
+.yellow:active {
+    background-color: rgb(219, 200, 100) !important;
+}

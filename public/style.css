@@ -13,15 +13,6 @@
     transition: transform 0.3s ease, background-color 0.5s ease;
 }
 
-.red {
-    background-color: rgb(219, 142, 142) !important;
-}
-
-.red:hover,
-.red:active {
-    background-color: rgb(219, 100, 100) !important;
-}
-
 .info {
     display: none;
     position: absolute;
