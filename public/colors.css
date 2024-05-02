@@ -15,3 +15,7 @@
 .yellow:active {
     background-color: rgb(219, 200, 100) !important;
 }
+
+.white-text {
+    color: white !important;
+}

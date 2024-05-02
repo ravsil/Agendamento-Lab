@@ -5,37 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Agendamento</title>
-    <script src="https://accounts.google.com/gsi/client"></script>
-    <script>
-        // Inicialize o Google One Tap
-        google.accounts.id.initialize({
-            client_id: '435463394698-f22hdgvn8n8qatsst5pg2ss2c8de0to6.apps.googleusercontent.com',
-            callback: handleCredentialResponse
-        });
-        // Manipula a resposta de credenciais
-        function handleCredentialResponse(response) {
-            if (response.credential) {
-                // As credenciais do usuário estão disponíveis em response.credential
-                console.log('Credenciais do usuário:', response.credential);
-            } else {
-                // O usuário não fez login
-                console.log('O usuário não fez login.');
-            }
-        }
-        // Adicione um ouvinte de eventos ao botão de login
-        document.getElementById('login-button').addEventListener('click', function() {
-            // Solicite as credenciais do usuário
-            google.accounts.id.prompt(notification => {
-                if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-                    // O usuário não visualizou ou pulou a notificação
-                    console.log('O usuário não visualizou ou pulou a notificação.');
-                } else {
-                    // A notificação foi exibida e o usuário interagiu com ela
-                    console.log('O usuário interagiu com a notificação.');
-                }
-            });
-        });
-      </script>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -46,8 +15,7 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 
     <!-- Logo -->
-    <link rel="icon"
-        href="https://cdn.discordapp.com/attachments/1176205653086318711/1225908296561594471/Logo2.png?ex=662b68d2&is=662a1752&hm=5c2bee597150880c0d10ab9446975381964c2c132f992b582b749a55931a404f&">
+    <link rel="icon" href="https://cdn.glitch.global/da38d8b0-49b0-446f-95c2-2967b36af762/logo.png?v=1714602770565">
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
@@ -64,9 +32,10 @@
         <div id="buttonDiv"></div>
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="https://cdn.discordapp.com/attachments/1176205653086318711/1225908296561594471/Logo2.png?ex=662b68d2&is=662a1752&hm=5c2bee597150880c0d10ab9446975381964c2c132f992b582b749a55931a404f&"
-                    width="50" height="50" alt="Orçamento pessoal">
+                <img src="https://cdn.glitch.global/da38d8b0-49b0-446f-95c2-2967b36af762/logo.png?v=1714602770565"
+                    width="50" height="50">
             </a>
+            <button id="login-button"></button>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -113,6 +82,8 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+        <script src="https://accounts.google.com/gsi/client"></script>
+        <script src="google.js"></script>
         <script src="script.js"></script>
         <script src="scheduledEvents.js"></script>
     </div>

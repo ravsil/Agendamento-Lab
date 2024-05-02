@@ -15,7 +15,7 @@ function getDate() {
 
 function setImage() {
     let img = document.createElement("img");
-    img.setAttribute("src", "https://cdn.discordapp.com/attachments/1176205653086318711/1225908295869534348/computador.png?ex=662b68d2&is=662a1752&hm=d6908089556ad123cfcf2ccba1e153ec3d7d1b794fe3e28ccb8d49e0f32a9568&");
+    img.setAttribute("src", "https://cdn.glitch.global/da38d8b0-49b0-446f-95c2-2967b36af762/pc.png?v=1714602850340");
     img.className = "img-fluid grower";
     return img;
 }
