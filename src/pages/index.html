@@ -5,6 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Agendamento</title>
+    <script src="https://accounts.google.com/gsi/client" async></script>
+    <script src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
+    <script>
+        function handleCredentialResponse(response) {
+          const data = jwt_decode(response.credential)
+          console.log(data)
+
+        }
+        window.onload = function () {
+          google.accounts.id.initialize({
+            client_id: "435463394698-t05kq56tk3o3lm63d75np686umpqda60.apps.googleusercontent.com",
+            callback: handleCredentialResponse
+          });
+          google.accounts.id.renderButton(
+            document.getElementById("buttonDiv"),
+            { theme: "outline", size: "large" }  // customization attributes
+          );
+          google.accounts.id.prompt(); // also display the One Tap dialog
+        }
+      </script>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -30,6 +50,7 @@
 
     <!-- Barra de Navegação -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
+        <div id="buttonDiv"></div>
         <div class="container">
             <a class="navbar-brand" href="#">
                 <img src="https://cdn.discordapp.com/attachments/1176205653086318711/1225908296561594471/Logo2.png?ex=662b68d2&is=662a1752&hm=5c2bee597150880c0d10ab9446975381964c2c132f992b582b749a55931a404f&"
