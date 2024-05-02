@@ -5,27 +5,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Agendamento</title>
-    <script src="https://accounts.google.com/gsi/client" async></script>
-    <script src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
-    <div data-use_fedcm_for_prompt="true"></div>
+    <script src="https://accounts.google.com/gsi/client"></script>
     <script>
-        function handleCredentialResponse(response) {
-          //const data = jwt_decode(response.credential)
-          console.log(response)
-        }
-        
-        window.onload = function () {
-          google.accounts.id.initialize({
-            client_id: "435463394698-f22hdgvn8n8qatsst5pg2ss2c8de0to6.apps.googleusercontent.com",
-            use_fedcm_for_prompt: true,
+        // Inicialize o Google One Tap
+        google.accounts.id.initialize({
+            client_id: '435463394698-f22hdgvn8n8qatsst5pg2ss2c8de0to6.apps.googleusercontent.com',
             callback: handleCredentialResponse
-          });
-          google.accounts.id.renderButton(
-            document.getElementById("buttonDiv"),
-            { theme: "outline", size: "large" }  // customization attributes
-          );
-          google.accounts.id.prompt(); // also display the One Tap dialog
+        });
+        // Manipula a resposta de credenciais
+        function handleCredentialResponse(response) {
+            if (response.credential) {
+                // As credenciais do usuário estão disponíveis em response.credential
+                console.log('Credenciais do usuário:', response.credential);
+            } else {
+                // O usuário não fez login
+                console.log('O usuário não fez login.');
+            }
         }
+        // Adicione um ouvinte de eventos ao botão de login
+        document.getElementById('login-button').addEventListener('click', function() {
+            // Solicite as credenciais do usuário
+            google.accounts.id.prompt(notification => {
+                if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                    // O usuário não visualizou ou pulou a notificação
+                    console.log('O usuário não visualizou ou pulou a notificação.');
+                } else {
+                    // A notificação foi exibida e o usuário interagiu com ela
+                    console.log('O usuário interagiu com a notificação.');
+                }
+            });
+        });
       </script>
 
     <!-- Bootstrap CSS -->
