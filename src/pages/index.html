@@ -16,6 +16,7 @@
         window.onload = function () {
           google.accounts.id.initialize({
             client_id: "435463394698-f22hdgvn8n8qatsst5pg2ss2c8de0to6.apps.googleusercontent.com",
+            use_fedcm_for_prompt: true,
             callback: handleCredentialResponse
           });
           google.accounts.id.renderButton(
