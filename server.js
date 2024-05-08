@@ -21,6 +21,9 @@ fastify.register(require("@fastify/view"), {
 fastify.get("/", function (request, reply) {
     reply.view("src/pages/index.html");
 });
+fastify.get("/agendamento", function (request, reply) {
+    reply.view("src/pages/main.html");
+});
 
 fastify.listen(
     { port: process.env.PORT, host: "0.0.0.0" },
