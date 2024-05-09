@@ -12,27 +12,29 @@ function parseJwt(token) {
 google.accounts.id.initialize({
     client_id: '435463394698-f22hdgvn8n8qatsst5pg2ss2c8de0to6.apps.googleusercontent.com',
     callback: handleCredentialResponse
+    
 });
+
+
 // Manipula a resposta de credenciais
 function handleCredentialResponse(response) {
     if (response.credential) {
         // As credenciais do usuário estão disponíveis em response.credential
-        credentials = parseJwt(response.credential);
+        let credentials = parseJwt(response.credential);
         if (credentials.hd != "ufrrj.br") {
             alert("Utilize um e-mail da UFRRJ para fazer login");
             return;
         }
-        var loginButton = document.getElementById('login-button');
-        var newDiv = document.createElement('div');
-        newDiv.className = 'white-text';
-        newDiv.innerText = `Olá ${credentials.given_name.charAt(0).toUpperCase() + credentials.given_name.slice(1).toLowerCase()}!`;
-        loginButton.parentNode.insertBefore(newDiv, loginButton);
-        loginButton.parentNode.removeChild(loginButton);
+        let name = credentials.given_name.charAt(0).toUpperCase() + credentials.given_name.slice(1).toLowerCase();
+        localStorage.setItem("name", name);
+        window.location.href = "/agendamento";
+        
     } else {
         // O usuário não fez login
         console.log('O usuário não fez login.');
     }
 }
+
 // Adicione um ouvinte de eventos ao botão de login
 document.getElementById('login-button').addEventListener('click', function () {
     // Solicite as credenciais do usuário
@@ -45,12 +47,4 @@ document.getElementById('login-button').addEventListener('click', function () {
             console.log('O usuário interagiu com a notificação.');
         }
     });
-});
-
-
-window.addEventListener('load', function () {
-    google.accounts.id.renderButton(
-        document.getElementById("login-button"),
-        { theme: "outline", size: "large" }  // customization attributes
-    );
 });

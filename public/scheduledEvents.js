@@ -11,7 +11,7 @@ function runOnOddMinute() {
         }
         currentMinute = minute;
         title.innerText = `${title.innerText}\n(Em aula)`
-        alert("Em aula");
+//        alert("Em aula");
         for (let i = 0; i < 24; i++) {
             let element = document.getElementById(i);
             element.children[0].classList.remove("red");

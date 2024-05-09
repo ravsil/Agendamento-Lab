@@ -7,7 +7,7 @@ Frequentemente, o laboratório é utilizado para aulas ou fica lotado durante os
 # TO-DO
 
 - [X] Página com todos os computadores
-- [ ] Página inicial
+- [X] Página inicial
   - [X] Login com Google
 - [ ] Página de agendamento
   - [ ] Sistema de agendamento

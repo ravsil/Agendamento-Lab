@@ -19,7 +19,7 @@ fastify.register(require("@fastify/view"), {
 });
 
 fastify.get("/", function (request, reply) {
-    reply.view("src/pages/index.html");
+    reply.view("src/pages/login.html");
 });
 fastify.get("/agendamento", function (request, reply) {
     reply.view("src/pages/main.html");

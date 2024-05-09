@@ -95,7 +95,19 @@ function submit() {
     document.getElementById("popup").style.display = "none";
 }
 
+
 window.addEventListener('load', generateComputers);
+
+window.addEventListener('load', function() {
+    let name = localStorage.getItem("name");
+    localStorage.removeItem("name");
+    if (name != null) {
+        document.getElementById("hello").innerText = `Olá ${name}!`;
+        let loginLink = document.getElementById("login-link")
+        loginLink.parentNode.removeChild(loginLink)
+    }
+
+})
 
 // fecha o popup quando clica fora dele
 window.onclick = function (event) {
