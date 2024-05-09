@@ -5,6 +5,32 @@ const fastify = require("fastify")({
     logger: false,
 });
 
+async function updateData() {
+    let agendamentos = await fs.promises.readFile('data.json', 'utf8');
+    let hora = new Date().getHours()
+    let minuto = new Date().getMinutes()
+    for (let i = 0; i < 16; i++) {
+        if (agendamentos[i].horarios.length == 0) continue;
+
+        for (let j = 0; j < agendamentos[i].horarios.length; j++) {
+            let horario_inicio = agendamentos[i].horarios[j].split("-")[0].split("h");
+            let horario_final = agendamentos[i].horarios[j].split("-")[1].split("h");
+            // nao começou
+            if ((horario_inicio[0] > hora) || (horario_inicio[0] == hora && horario_inicio[1] > minuto)) {
+                continue;
+            }
+            // ja passou
+            else if ((hora > horario_final[0]) || (horario_final[0] == hora && minuto > horario_final[1])) {
+                agendamentos[i].horarios.splice(agendamentos[i].horarios.indexOf(agendamentos[i].horarios[j]), 1);
+                agendamentos[i].users.splice(agendamentos[i].users.indexOf(agendamentos[i].users[j]), 1);
+                j--;
+            }
+        }
+    }
+    await fs.promises.writeFile('data.json', agendamentos);
+}
+
+
 fastify.register(require("@fastify/static"), {
     root: path.join(__dirname, "public"),
     prefix: "/",
@@ -54,7 +80,8 @@ fastify.post('/save-file', async (request, reply) => {
     }
 });
 
-
+// melhor não usar no host atual
+//setInterval(updateData, 10 * 60 * 1000);
 fastify.listen(
     { port: process.env.PORT, host: "0.0.0.0" },
     function (err, address) {
