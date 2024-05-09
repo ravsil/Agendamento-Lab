@@ -88,24 +88,63 @@ function generateComputers() {
 
 function submit() {
     let value = document.getElementById("popup").children[0].value
-    console.log(value);
-    document.getElementById(value).children[0].className += " red";
-    document.getElementById(value).children[1].className += " red";
-    document.getElementById(`btn_${value}`).disabled = true;
-    document.getElementById("popup").style.display = "none";
+    let hora = JSON.parse(document.getElementById("value_hora").value)
+    let horario = "";
+    if (hora < 10) {
+        horario = "0" + hora.toString()
+        hora = (hora == 9) ? "10" : "0" + (hora + 1).toString()
+    } else {
+        horario = hora.toString()
+        hora = (hora + 1).toString()
+    }
+    horario += ":"
+    let minuto = JSON.parse(document.getElementById("value_minuto").value)
+    if (minuto < 10) {
+        horario += "0" + minuto.toString()
+        minuto = (minuto == 9) ? "10" : (minuto + 1).toString()
+    } else {
+        horario += minuto.toString()
+        minuto = (minuto + 1).toString()
+    }
+    horario += `-${hora}:${minuto}`
+
+    $.getJSON("/get-file", function (data) {
+        let agendamentos = data;
+        agendamentos[value].horarios.push(horario);
+        agendamentos[value].users.push(localStorage.getItem("email"));
+
+        console.log(agendamentos)
+
+        $.post("/save-file", { "body": JSON.stringify(agendamentos) }, function (response) {
+            console.log(response);
+        });
+    });
+    update();
 }
 
 
 window.addEventListener('load', generateComputers);
 
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     let name = localStorage.getItem("name");
-    localStorage.removeItem("name");
+
     if (name != null) {
         document.getElementById("hello").innerText = `Olá ${name}!`;
         let loginLink = document.getElementById("login-link")
         loginLink.parentNode.removeChild(loginLink)
+    } else {
+        for (let i = 0; i < 24; i++) {
+            let element = document.getElementById(i);
+            document.getElementById(`btn_${i}`).disabled = true;
+        }
     }
+
+    let time = new Date().getTime();
+    if (this.localStorage.getItem("time") + 1000 * 60 * 60 * 8 < time) {
+        localStorage.removeItem("name");
+        localStorage.removeItem("email");
+        localStorage.removeItem("time");
+    };
 
 })
 

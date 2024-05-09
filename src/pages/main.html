@@ -36,13 +36,13 @@
                     width="50" height="50">
             </a>
 
-          <div id="hello" class="white-text"></div>
+            <div id="hello" class="white-text"></div>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-          
+
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto mr-4">
                     <li class="nav-item active">
@@ -60,11 +60,12 @@
     <div id="popup">
         <div class="popup_content">
             <div id="title"></div>
-            <select class="form-control">
-                <option value="option1">Horário 1</option>
-                <option value="option2">Horário 2</option>
-                <option value="option3">Horário 3</option>
-            </select>
+            <div id="value_display_hora">Hora: 0</div>
+            <input id="value_hora" type="range" class="form-control" min="0" max="24" step="1"
+                onchange="document.getElementById('value_display_hora').innerText = `Hora: ${this.value}`">
+            <div id="value_display_minuto"> Minuto: 0</div>
+            <input id="value_minuto" type="range" class="form-control" min="0" max="59" step="1"
+                onchange="document.getElementById('value_display_minuto').innerText = `Minuto: ${this.value}`">
             <button class="btn btn-primary" onclick="submit()">Confirmar</button>
         </div>
     </div>
@@ -87,8 +88,9 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="test.js"></script>
         <script src="script.js"></script>
-        <script src="scheduledEvents.js"></script>
     </div>
 </body>
 

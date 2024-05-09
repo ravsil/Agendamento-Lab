@@ -12,7 +12,7 @@ function parseJwt(token) {
 google.accounts.id.initialize({
     client_id: '435463394698-f22hdgvn8n8qatsst5pg2ss2c8de0to6.apps.googleusercontent.com',
     callback: handleCredentialResponse
-    
+
 });
 
 
@@ -26,9 +26,11 @@ function handleCredentialResponse(response) {
             return;
         }
         let name = credentials.given_name.charAt(0).toUpperCase() + credentials.given_name.slice(1).toLowerCase();
+        localStorage.setItem("email", credentials.email);
         localStorage.setItem("name", name);
+        localStorage.setItem("time", new Date().getTime());
         window.location.href = "/agendamento";
-        
+
     } else {
         // O usuário não fez login
         console.log('O usuário não fez login.');

@@ -16,7 +16,7 @@
 .info {
     display: none;
     position: absolute;
-    top: -52%;
+    top: -65%;
     left: 50%;
     transform: translateX(-50%);
     background-color: rgb(219, 219, 219);
