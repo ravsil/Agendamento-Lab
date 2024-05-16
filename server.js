@@ -13,14 +13,14 @@ const db = new sqlite.Database("agendamento.db", sqlite.OPEN_READWRITE, (err) =>
     console.log("Connected to the database.");
 });
 
-async function updateData(){
+async function updateData() {
     let agendamentos = await fs.promises.readFile('data.json', 'utf8');
     agendamentos = JSON.parse(agendamentos)
     let hora = new Date().getHours() - 3 // gmt-3
     let minuto = new Date().getMinutes()
     for (let i = 0; i < 24; i++) {
         if (agendamentos[i].horarios.length == 0) continue;
-  
+
         for (let j = 0; j < agendamentos[i].horarios.length; j++) {
             let horario_inicio = agendamentos[i].horarios[j].split("-")[0].split("h");
             let horario_final = agendamentos[i].horarios[j].split("-")[1].split("h");
@@ -57,8 +57,8 @@ fastify.get("/", function (request, reply) {
     db.all('SELECT * FROM Computador', (err, rows) => {
         if (err) {
             console.error(err);
-        } else {            
-            rows.forEach( (row) => {
+        } else {
+            rows.forEach((row) => {
                 console.log(`Id: ${row.patrimonio}\nProcessasdor: ${row.processador}\n\n`);
             });
         }
@@ -105,17 +105,17 @@ fastify.get('/get-computers', async (request, reply) => {
 
 fastify.post('/addUser', async (request, reply) => {
     let email = request.body.email
-    
+
     db.all('SELECT email FROM Usuario', (err, rows) => {
         if (err) {
             console.error(err);
-        } else {            
-          console.log(rows)
+        } else {
+            console.log(rows)
             for (let i = 0; i < rows.length; i++) {
-              console.log(rows[i])
-              if (email == rows[i].email) {
-                return
-              }
+                console.log(rows[i])
+                if (email == rows[i].email) {
+                    return
+                }
             }
             db.run("INSERT INTO Usuario(email, ocupacao) VALUES(?,'aluno')", [email]);
         }
