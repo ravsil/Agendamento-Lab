@@ -5,6 +5,15 @@ const fastify = require("fastify")({
     logger: false,
 });
 
+const db = new sqlite3.Database("agendamento.db", sqlite3.OPEN_READWRITE, (err) => {
+    if (err) {
+        console.error(err.message);
+    }
+    console.log("Connected to the database.");
+});
+db.run("CREATE TABLE Ocupacoes(id_ocupacao INT AUTO_INCREMENT PRIMARY KEY,ocupacao VARCHAR(20) NOT NULL)");
+db.run("CREATE TABLE Usuario (email VARCHAR(255) NOT NULL PRIMARY KEY,id_ocupacao INT NOT NULL,FOREIGN KEY (id_ocupacao) REFERENCES Ocupacoes(id_ocupacao)");
+
 async function updateData(){
     let agendamentos = await fs.promises.readFile('data.json', 'utf8');
     agendamentos = JSON.parse(agendamentos)
