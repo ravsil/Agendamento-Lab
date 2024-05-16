@@ -1,8 +1,16 @@
 const path = require("path");
 const fs = require("fs")
+const sqlite = require("sqlite3");
 
 const fastify = require("fastify")({
     logger: false,
+});
+
+const db = new sqlite.Database("agendamento.db", sqlite.OPEN_READWRITE, (err) => {
+    if (err) {
+        console.error(err.message);
+    }
+    console.log("Connected to the database.");
 });
 
 async function updateData(){
@@ -46,6 +54,15 @@ fastify.register(require("@fastify/view"), {
 });
 
 fastify.get("/", function (request, reply) {
+    db.all('SELECT * FROM Computador', (err, rows) => {
+        if (err) {
+            console.error(err);
+        } else {            
+            rows.forEach( (row) => {
+                console.log(`Id: ${row.patrimonio}\nProcessasdor: ${row.processador}\n\n`);
+            });
+        }
+    });
     reply.view("src/pages/login.html");
 });
 
@@ -67,6 +84,44 @@ fastify.get('/get-file', async (request, reply) => {
     }
 });
 
+fastify.get('/get-computers', async (request, reply) => {
+    try {
+        const rows = await new Promise((resolve, reject) => {
+            db.all('SELECT * FROM Computador', (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+        reply.send(rows);
+    } catch (err) {
+        console.error(err);
+        reply.status(500).send({ error: 'Database error' });
+    }
+});
+
+
+fastify.post('/addUser', async (request, reply) => {
+    let email = request.body.email
+    
+    db.all('SELECT email FROM Usuario', (err, rows) => {
+        if (err) {
+            console.error(err);
+        } else {            
+          console.log(rows)
+            for (let i = 0; i < rows.length; i++) {
+              console.log(rows[i])
+              if (email == rows[i].email) {
+                return
+              }
+            }
+            db.run("INSERT INTO Usuario(email, ocupacao) VALUES(?,'aluno')", [email]);
+        }
+    });
+});
+
 fastify.post('/save-file', async (request, reply) => {
     try {
         // Assuming you're receiving the file in the request body
@@ -82,7 +137,6 @@ fastify.post('/save-file', async (request, reply) => {
     }
 });
 
-//setInterval(updateData, 10 * 60 * 1000);
 fastify.listen(
     { port: process.env.PORT, host: "0.0.0.0" },
     function (err, address) {

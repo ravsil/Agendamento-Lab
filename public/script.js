@@ -20,23 +20,18 @@ function setImage() {
     return img;
 }
 
-function setInfo(index) {
+function setInfo(pc) {
     let info = document.createElement("div");
 
     // jeito feio de arrumar os elementos no mobile
-    if (index % 3 == 0 && window.innerWidth < 500) {
+    if (pc.patrimonio % 3 == 0 && window.innerWidth < 500) {
         info.className = "info left";
-    } else if (index % 3 == 2 && window.innerWidth < 500) {
+    } else if (pc.patrimonio % 3 == 2 && window.innerWidth < 500) {
         info.className = "info right";
     } else {
         info.className = "info";
     }
-
-    if (index < 10) {
-        info.innerText = `Computador ${index}\nMemória RAM: 16GB\nProcessador: Ryzen 5600g`
-    } else {
-        info.innerText = `Computador ${index}\nMemória RAM: 4GB\nProcessador: ???`
-    }
+    info.innerText = `Computador ${pc.patrimonio}\nMemória RAM: ${pc.qtd_memoria_ram}\nProcessador: ${pc.processador}`
     return info;
 }
 
@@ -67,21 +62,23 @@ function setItem(img, info, btn, index) {
 }
 
 function generateComputers() {
-    let index = 0;
-    document.getElementById("txt-Principal").innerText += ` (${getDate()})`
+    $.getJSON("/get-computers", function (data) {
+      let computers = data;
+      document.getElementById("txt-Principal").innerText += ` (${getDate()})`
+    let index = 0
     for (let i = 0; i < 4; i++) {
         let row = document.createElement("div");
         row.className = "row mb-5 mt-5 justify-content-around";
         for (let j = 0; j < 6; j++) {
             let img = setImage();
-            let info = setInfo(index);
-            let btn = addBtn(index);
-            let item = setItem(img, info, btn, index);
+            let info = setInfo(computers[i*6 + j]);
+            let btn = addBtn(computers[i*6 + j].patrimonio);
+            let item = setItem(img, info, btn, computers[i*6 + j].patrimonio);
             row.appendChild(item);
-            index++;
         }
         document.getElementById("container0").appendChild(row);
     }
+    });
 
 
 }

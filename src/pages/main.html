@@ -51,6 +51,16 @@
                     <li class="nav-item active" id="login-link">
                         <a class="nav-link" href="/">Login</a>
                     </li>
+                    <li class="nav-item active" id="login-link">
+                      <script>
+                        function logout() {
+                          localStorage.removeItem("name");
+                          localStorage.removeItem("email");
+                          localStorage.removeItem("time");
+                        }
+                      </script>
+                        <a class="nav-link" onclick="logout()" href="/">Logout</a>
+                    </li>
                 </ul>
 
             </div>
@@ -90,7 +100,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <script src="test.js"></script>
+        <script src="scheduledEvents.js"></script>
         <script src="script.js"></script>
     </div>
 </body>
