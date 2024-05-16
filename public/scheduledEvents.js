@@ -3,7 +3,7 @@ function update() {
         let agendamentos = data
         let hora = new Date().getHours()
         let minuto = new Date().getMinutes()
-        for (let i = 1; i <= 16; i++) {
+        for (let i = 0; i < 24; i++) {
             if (agendamentos[i].horarios.length == 0) continue;
 
             for (let j = 0; j < agendamentos[i].horarios.length; j++) {
@@ -23,7 +23,6 @@ function update() {
                     document.getElementById(i).children[0].className += " red";
                     document.getElementById(i).children[1].className += " red";
                     document.getElementById(`btn_${i}`).disabled = true;
-
                     if (i < 10) {
                         document.getElementById(i).children[1].innerText = `Computador ${i}\nMemória RAM: 16GB\nProcessador: Ryzen 5600g\nAgendado: ${agendamentos[i].users[j].split('@')[0]}`;
                     } else {

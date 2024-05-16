@@ -60,10 +60,11 @@
     <div id="popup">
         <div class="popup_content">
             <div id="title"></div>
-            <div id="value_display_hora">Hora: 0</div>
+            <h6>Horário de início</h6>
+            <div id="value_display_hora">Hora: 12</div>
             <input id="value_hora" type="range" class="form-control" min="0" max="24" step="1"
                 onchange="document.getElementById('value_display_hora').innerText = `Hora: ${this.value}`">
-            <div id="value_display_minuto"> Minuto: 0</div>
+            <div id="value_display_minuto"> Minuto: 30</div>
             <input id="value_minuto" type="range" class="form-control" min="0" max="59" step="1"
                 onchange="document.getElementById('value_display_minuto').innerText = `Minuto: ${this.value}`">
             <button class="btn btn-primary" onclick="submit()">Confirmar</button>
@@ -89,7 +90,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <script src="scheduledEvents.js"></script>
+        <script src="test.js"></script>
         <script src="script.js"></script>
     </div>
 </body>

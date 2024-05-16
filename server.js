@@ -5,13 +5,14 @@ const fastify = require("fastify")({
     logger: false,
 });
 
-async function updateData() {
+async function updateData(){
     let agendamentos = await fs.promises.readFile('data.json', 'utf8');
-    let hora = new Date().getHours()
+    agendamentos = JSON.parse(agendamentos)
+    let hora = new Date().getHours() - 3 // gmt-3
     let minuto = new Date().getMinutes()
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < 24; i++) {
         if (agendamentos[i].horarios.length == 0) continue;
-
+  
         for (let j = 0; j < agendamentos[i].horarios.length; j++) {
             let horario_inicio = agendamentos[i].horarios[j].split("-")[0].split("h");
             let horario_final = agendamentos[i].horarios[j].split("-")[1].split("h");
@@ -20,14 +21,14 @@ async function updateData() {
                 continue;
             }
             // ja passou
-            else if ((hora > horario_final[0]) || (horario_final[0] == hora && minuto > horario_final[1])) {
+            if ((hora > horario_final[0]) || (horario_final[0] == hora && minuto > horario_final[1]) || (horario_final[0] == 25)) {
                 agendamentos[i].horarios.splice(agendamentos[i].horarios.indexOf(agendamentos[i].horarios[j]), 1);
                 agendamentos[i].users.splice(agendamentos[i].users.indexOf(agendamentos[i].users[j]), 1);
                 j--;
             }
         }
     }
-    await fs.promises.writeFile('data.json', agendamentos);
+    await fs.promises.writeFile('data.json', JSON.stringify(agendamentos));
 }
 
 
@@ -50,6 +51,7 @@ fastify.get("/", function (request, reply) {
 
 fastify.get("/agendamento", function (request, reply) {
     reply.view("src/pages/main.html");
+    updateData();
 });
 
 fastify.get('/get-file', async (request, reply) => {
@@ -80,7 +82,6 @@ fastify.post('/save-file', async (request, reply) => {
     }
 });
 
-// melhor não usar no host atual
 //setInterval(updateData, 10 * 60 * 1000);
 fastify.listen(
     { port: process.env.PORT, host: "0.0.0.0" },
@@ -92,3 +93,4 @@ fastify.listen(
         console.log(`Your app is listening on ${address}`);
     }
 );
+

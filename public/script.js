@@ -89,6 +89,8 @@ function generateComputers() {
 function submit() {
     let value = document.getElementById("popup").children[0].value
     let hora = JSON.parse(document.getElementById("value_hora").value)
+    document.getElementById("popup").style.display = "none";
+    document.getElementById(`btn_${value}`).disabled = true;
     let horario = "";
     if (hora < 10) {
         horario = "0" + hora.toString()
@@ -97,35 +99,48 @@ function submit() {
         horario = hora.toString()
         hora = (hora + 1).toString()
     }
-    horario += ":"
+    horario += "h"
     let minuto = JSON.parse(document.getElementById("value_minuto").value)
     if (minuto < 10) {
         horario += "0" + minuto.toString()
         minuto = (minuto == 9) ? "10" : (minuto + 1).toString()
     } else {
         horario += minuto.toString()
-        minuto = (minuto + 1).toString()
+        minuto = (minuto).toString()
     }
-    horario += `-${hora}:${minuto}`
+    horario += `-${hora}h${minuto}`
 
     $.getJSON("/get-file", function (data) {
         let agendamentos = data;
         agendamentos[value].horarios.push(horario);
         agendamentos[value].users.push(localStorage.getItem("email"));
-
-        console.log(agendamentos)
-
-        $.post("/save-file", { "body": JSON.stringify(agendamentos) }, function (response) {
+        
+      
+        $.post("/save-file", {"body": JSON.stringify(agendamentos)}, function (response) {
             console.log(response);
         });
+        update();
     });
-    update();
+    
+    alert(`Computador ${value} agendado para o horário de ${horario}`)
 }
 
+function hasScheduled() {
+  for (let i = 0; i < 24; i++) {
+}
+  return false;
+}
 
 window.addEventListener('load', generateComputers);
 
 window.addEventListener('load', function () {
+    let time = new Date().getTime();
+    if (JSON.parse(localStorage.getItem("time")) + 1000 * 60 * 60 * 8 < time) {
+        localStorage.removeItem("name");
+        localStorage.removeItem("email");
+        localStorage.removeItem("time");
+    };
+
     let name = localStorage.getItem("name");
 
     if (name != null) {
@@ -138,14 +153,6 @@ window.addEventListener('load', function () {
             document.getElementById(`btn_${i}`).disabled = true;
         }
     }
-
-    let time = new Date().getTime();
-    if (this.localStorage.getItem("time") + 1000 * 60 * 60 * 8 < time) {
-        localStorage.removeItem("name");
-        localStorage.removeItem("email");
-        localStorage.removeItem("time");
-    };
-
 })
 
 // fecha o popup quando clica fora dele
@@ -154,3 +161,4 @@ window.onclick = function (event) {
         document.getElementById("popup").style.display = "none";
     }
 }
+
