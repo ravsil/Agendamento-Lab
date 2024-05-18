@@ -34,5 +34,5 @@ function update() {
         }
     })
 }
-update()
+
 setInterval(update, 60000);

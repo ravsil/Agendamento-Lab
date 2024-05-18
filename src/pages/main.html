@@ -51,14 +51,7 @@
                     <li class="nav-item active" id="login-link">
                         <a class="nav-link" href="/">Login</a>
                     </li>
-                    <li class="nav-item active" id="login-link">
-                      <script>
-                        function logout() {
-                          localStorage.removeItem("name");
-                          localStorage.removeItem("email");
-                          localStorage.removeItem("time");
-                        }
-                      </script>
+                    <li class="nav-item active" id="logout-link">
                         <a class="nav-link" onclick="logout()" href="/">Logout</a>
                     </li>
                 </ul>
@@ -69,15 +62,30 @@
 
     <div id="popup">
         <div class="popup_content">
-            <div id="title"></div>
-            <h6>Horário de início</h6>
-            <div id="value_display_hora">Hora: 12</div>
-            <input id="value_hora" type="range" class="form-control" min="0" max="24" step="1"
-                onchange="document.getElementById('value_display_hora').innerText = `Hora: ${this.value}`">
-            <div id="value_display_minuto"> Minuto: 30</div>
-            <input id="value_minuto" type="range" class="form-control" min="0" max="59" step="1"
-                onchange="document.getElementById('value_display_minuto').innerText = `Minuto: ${this.value}`">
-            <button class="btn btn-primary" onclick="submit()">Confirmar</button>
+            <div class="row" id="title" style="text-align: center; font-size: 1.2rem; margin-bottom: 0.5rem;"></div>
+            <div class="container mt-5" style="margin-top: -0.01rem !important">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form>
+                            <div class="form-group">
+                                <label for="hora1">Horário de início:</label>
+                                <select class="form-control" id="hora1" onchange="updateHoraFinal()">
+                                    <option value="" selected></option>
+                                </select>
+                            </div>
+                        </form>
+                        <form>
+                            <div class="form-group">
+                                <label for="hora2">Horário final:</label>
+                                <select class="form-control" id="hora2" disabled="true">
+                                </select>
+                            </div>
+                        </form>
+                        <button class="btn btn-primary" onclick="console.log('e')"
+                            style="margin-top: -0.01rem !important">Salvar</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -25,21 +25,21 @@ function handleCredentialResponse(response) {
             alert("Utilize um e-mail da UFRRJ para fazer login");
             return;
         }
-        
+
         $.ajax({
-          url: '/addUser',
-          type: 'POST',
-          data: {
-              email: credentials.email
-          },
-          success: function(response) {
-              console.log('Usuário adicionado com sucesso:', response);
-          },
-          error: function(error) {
-              console.log('Erro ao adicionar usuário:', error);
-          }
+            url: '/add-user',
+            type: 'POST',
+            data: {
+                email: credentials.email
+            },
+            success: function (response) {
+                console.log('Usuário adicionado com sucesso:', response);
+            },
+            error: function (error) {
+                console.log('Erro ao adicionar usuário:', error);
+            }
         });
-      
+
         let name = credentials.given_name.charAt(0).toUpperCase() + credentials.given_name.slice(1).toLowerCase();
         localStorage.setItem("email", credentials.email);
         localStorage.setItem("name", name);

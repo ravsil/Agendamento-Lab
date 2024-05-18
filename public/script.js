@@ -40,9 +40,12 @@ function addBtn(id) {
     btn.className = "btn btn-primary";
     btn.innerText = "Agendar";
     btn.id = `btn_${id}`;
+    if (localStorage.getItem("name") == null) {
+        btn.disabled = true
+    }
     btn.onclick = function () {
         document.getElementById("popup").style.display = "block";
-        document.getElementById("title").innerText = `Agendamento para o computador ${id}`
+        document.getElementById("title").innerText = `Agendamento para o Computador ${id}`
         document.getElementById("popup").children[0].value = id
     }
     return btn;
@@ -63,79 +66,133 @@ function setItem(img, info, btn, index) {
 
 function generateComputers() {
     $.getJSON("/get-computers", function (data) {
-      let computers = data;
-      document.getElementById("txt-Principal").innerText += ` (${getDate()})`
-    let index = 0
-    for (let i = 0; i < 4; i++) {
-        let row = document.createElement("div");
-        row.className = "row mb-5 mt-5 justify-content-around";
-        for (let j = 0; j < 6; j++) {
-            let img = setImage();
-            let info = setInfo(computers[i*6 + j]);
-            let btn = addBtn(computers[i*6 + j].patrimonio);
-            let item = setItem(img, info, btn, computers[i*6 + j].patrimonio);
-            row.appendChild(item);
+        let computers = data;
+        document.getElementById("txt-Principal").innerText += ` (${getDate()})`
+        let index = 0
+        for (let i = 0; i < 4; i++) {
+            let row = document.createElement("div");
+            row.className = "row mb-5 mt-5 justify-content-around";
+            for (let j = 0; j < 6; j++) {
+                let img = setImage();
+                let info = setInfo(computers[i * 6 + j]);
+                let btn = addBtn(computers[i * 6 + j].patrimonio);
+                let item = setItem(img, info, btn, computers[i * 6 + j].patrimonio);
+                row.appendChild(item);
+            }
+            document.getElementById("container0").appendChild(row);
         }
-        document.getElementById("container0").appendChild(row);
-    }
     });
-
-
+    update();
 }
 
 function submit() {
+    let horas = {
+        '08:00': 0,
+        '08:30': 1,
+        '09:00': 2,
+        '09:30': 3,
+        '10:00': 4,
+        '10:30': 5,
+        '11:00': 6,
+        '11:30': 7,
+        '12:00': 8,
+        '12:30': 9,
+        '13:00': 10,
+        '13:30': 11,
+        '14:00': 12,
+        '14:30': 13,
+        '15:00': 14,
+        '15:30': 15,
+        '16:00': 16,
+        '16:30': 17,
+        '17:00': 18,
+        '17:30': 19,
+        '18:00': 20,
+    }
+    //let hora1 = horas[document.getElementById("hora1").value];
+    //let hora2 = horas[document.getElementById("hora2").value];
     let value = document.getElementById("popup").children[0].value
-    let hora = JSON.parse(document.getElementById("value_hora").value)
+    let hora1 = document.getElementById("hora1").value.replace(":", "h");
+    let hora2 = document.getElementById("hora2").value.replace(":", "h");
+    let horario = `${hora1}-${hora2}`
+
     document.getElementById("popup").style.display = "none";
     document.getElementById(`btn_${value}`).disabled = true;
-    let horario = "";
-    if (hora < 10) {
-        horario = "0" + hora.toString()
-        hora = (hora == 9) ? "10" : "0" + (hora + 1).toString()
-    } else {
-        horario = hora.toString()
-        hora = (hora + 1).toString()
-    }
-    horario += "h"
-    let minuto = JSON.parse(document.getElementById("value_minuto").value)
-    if (minuto < 10) {
-        horario += "0" + minuto.toString()
-        minuto = (minuto == 9) ? "10" : (minuto + 1).toString()
-    } else {
-        horario += minuto.toString()
-        minuto = (minuto).toString()
-    }
-    horario += `-${hora}h${minuto}`
-
     $.getJSON("/get-file", function (data) {
         let agendamentos = data;
         agendamentos[value].horarios.push(horario);
         agendamentos[value].users.push(localStorage.getItem("email"));
-        
-      
-        $.post("/save-file", {"body": JSON.stringify(agendamentos)}, function (response) {
+
+
+        $.post("/save-file", { "body": JSON.stringify(agendamentos) }, function (response) {
             console.log(response);
         });
         update();
     });
-    
+
     alert(`Computador ${value} agendado para o horário de ${horario}`)
 }
 
-function hasScheduled() {
-  for (let i = 0; i < 24; i++) {
+function logout() {
+    localStorage.removeItem("name");
+    localStorage.removeItem("email");
+    localStorage.removeItem("time");
 }
-  return false;
+
+function createHours() {
+    let hora1 = document.getElementById("hora1")
+    let curHour = new Date().getHours();
+    let hourOffset = (curHour - 8 > 0) ? curHour - 8 : 0;
+    let curMin = new Date().getMinutes();
+    let minOffset = (curMin > 30) ? 30 : 0;
+    for (let hour = 8 + hourOffset; hour <= 17; hour++) {
+        for (let min = 0 + minOffset; min < 60; min += 30) {
+            let formattedHour = ("0" + hour).slice(-2);
+            let formattedMin = ("0" + min).slice(-2);
+            let element = document.createElement("option");
+            element.setAttribute("value", `${formattedHour}:${formattedMin}`);
+            element.innerText = `${formattedHour}:${formattedMin}`;
+            hora1.appendChild(element);
+        }
+    }
+
+}
+
+function updateHoraFinal() {
+    // remove a opção vazia
+    let hora1 = document.getElementById("hora1")
+    let empty = hora1.querySelector('option[value=""]');
+    if (empty) {
+        hora1.removeChild(empty);
+    }
+
+    let hora1Value = hora1.value;
+    let hora2Select = document.getElementById("hora2");
+    hora2Select.disabled = false;
+    hora2Select.innerHTML = ''; // Limpar as opções atuais
+
+    let hora1Hour = parseInt(hora1Value.split(':')[0]);
+    let hora1Min = parseInt(hora1Value.split(':')[1]);
+
+    // Adicionar opções para o segundo select começando após o horário selecionado no primeiro select
+    for (let hour = hora1Hour; hour <= 17; hour++) {
+        for (let min = (hour == hora1Hour ? hora1Min + 30 : 0); min < 60; min += 30) {
+            let formattedHour = ("0" + hour).slice(-2);
+            let formattedMin = ("0" + min).slice(-2);
+            hora2Select.innerHTML += `<option value="${formattedHour}:${formattedMin}">${formattedHour}:${formattedMin}</option>`;
+        }
+    }
+    // Último horário
+    hora2Select.innerHTML += `<option value="18:00">18:00</option>`;
 }
 
 window.addEventListener('load', generateComputers);
+window.addEventListener('load', createHours);
 
 window.addEventListener('load', function () {
     let time = new Date().getTime();
     if (JSON.parse(localStorage.getItem("time")) + 1000 * 60 * 60 * 8 < time) {
-        localStorage.removeItem("name");
-        localStorage.removeItem("email");
-        localStorage.removeItem("time");
+        logout();
     };
 
     let name = localStorage.getItem("name");
@@ -145,10 +202,8 @@ window.addEventListener('load', function () {
         let loginLink = document.getElementById("login-link")
         loginLink.parentNode.removeChild(loginLink)
     } else {
-        for (let i = 0; i < 24; i++) {
-            let element = document.getElementById(i);
-            document.getElementById(`btn_${i}`).disabled = true;
-        }
+        let logoutLink = document.getElementById("logout-link")
+        logoutLink.parentNode.removeChild(logoutLink)
     }
 })
 
@@ -158,4 +213,3 @@ window.onclick = function (event) {
         document.getElementById("popup").style.display = "none";
     }
 }
-

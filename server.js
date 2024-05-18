@@ -103,7 +103,7 @@ fastify.get('/get-computers', async (request, reply) => {
 });
 
 
-fastify.post('/addUser', async (request, reply) => {
+fastify.post('/add-user', async (request, reply) => {
     let email = request.body.email
 
     db.all('SELECT email FROM Usuario', (err, rows) => {
@@ -147,4 +147,3 @@ fastify.listen(
         console.log(`Your app is listening on ${address}`);
     }
 );
-
