@@ -9,9 +9,11 @@ Frequentemente, o laboratório é utilizado para aulas ou fica lotado durante os
 - [X] Página com todos os computadores
 - [X] Página inicial
   - [X] Login com Google
-- [ ] Página de agendamento
-  - [ ] Sistema de agendamento
-  - [ ] Salvar as alterações
+- [X] Página de agendamento
+  - [X] Sistema de agendamento
+  - [X] Salvar as alterações
+- [ ] Página de administração
+- [ ] Página do histórico de agendamentos
 - [X] Estado atual dos computadores
   - [X] Modo reservado
   - [X] Modo aula
