@@ -81,7 +81,7 @@
                                 </select>
                             </div>
                         </form>
-                        <button class="btn btn-primary" onclick="console.log('e')"
+                        <button class="btn btn-primary" onclick="submit()"
                             style="margin-top: -0.01rem !important">Salvar</button>
                     </div>
                 </div>
@@ -110,60 +110,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="scheduledEvents.js"></script>
         <script src="script.js"></script>
-        <script>
-            function updateHora2Options() {
-                var hora1Value = document.getElementById("hora1").value;
-                var hora2Select = document.getElementById("hora2");
-                hora2Select.innerHTML = ''; // Limpar as opções atuais
-
-                var hora1Hour = parseInt(hora1Value.split(':')[0]);
-                var hora1Min = parseInt(hora1Value.split(':')[1]);
-
-                // Adicionar opções para o segundo select começando após o horário selecionado no primeiro select
-                for (var hour = hora1Hour; hour <= 17; hour++) {
-                    for (var min = (hour == hora1Hour ? hora1Min + 30 : 0); min < 60; min += 30) {
-                        var formattedHour = ("0" + hour).slice(-2);
-                        var formattedMin = ("0" + min).slice(-2);
-                        hora2Select.innerHTML += `<option id="${iter}" value="${formattedHour}:${formattedMin}">${formattedHour}:${formattedMin}</option>`;
-                        iter++;
-                    }
-                }
-                // Último horário
-                hora2Select.innerHTML += `<option id="${iter}" value="18:00">18:00</option>`;
-            }
-
-
-            function submit() {
-
-                let horas = {
-                    '08:00': 0,
-                    '08:30': 1,
-                    '09:00': 2,
-                    '09:30': 3,
-                    '10:00': 4,
-                    '10:30': 5,
-                    '11:00': 6,
-                    '11:30': 7,
-                    '12:00': 8,
-                    '12:30': 9,
-                    '13:00': 10,
-                    '13:30': 11,
-                    '14:00': 12,
-                    '14:30': 13,
-                    '15:00': 14,
-                    '15:30': 15,
-                    '16:00': 16,
-                    '16:30': 17,
-                    '17:00': 18,
-                    '17:30': 19,
-                    '18:00': 20,
-                }
-
-                var hora1 = horas[document.getElementById("hora1").value];
-                var hora2 = horas[document.getElementById("hora2").value];
-                console.log(`Horário Inicial: ${hora1}\nHorário Final: ${hora2}`);
-            }	
-        </script>
     </div>
 </body>
 
