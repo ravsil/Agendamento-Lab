@@ -117,20 +117,39 @@ function submit() {
     let horario = `${hora1}-${hora2}`
 
     document.getElementById("popup").style.display = "none";
-    document.getElementById(`btn_${value}`).disabled = true;
-    $.getJSON("/get-file", function (data) {
-        let agendamentos = data;
-        agendamentos[value].horarios.push(horario);
-        agendamentos[value].users.push(localStorage.getItem("email"));
 
-
-        $.post("/save-file", { "body": JSON.stringify(agendamentos) }, function (response) {
-            console.log(response);
-        });
-        update();
+    let wrong = true
+    let users;
+    let agendamentos;
+    $.getJSON("/get-users", function (data) {
+        users = data;
     });
+    $.getJSON("/get-file", function (data) {
+        agendamentos = data;
+    });
+    // let email;
+    // $.getJSON("/get-key", function (key) {
+    //     email = CryptoJS.AES.decrypt(encryptedData, key.key).toString(CryptoJS.enc.Utf8);
+    // });
+    for (let i = 0; i < users.length; i++) {
+        // if (users[i].email == email) {
+        if (users[i].email == localStorage.getItem("email")) {
+            document.getElementById(`btn_${value}`).disabled = true;
+            agendamentos[value].horarios.push(horario);
+            agendamentos[value].users.push(localStorage.getItem("email"));
+            console.log("agendamentos", agendamentos);
 
-    alert(`Computador ${value} agendado para o horário de ${horario}`)
+            $.post("/save-file", { "body": JSON.stringify(agendamentos) }, function (response) {
+                console.log(response);
+            });
+            update();
+            wrong = false
+            alert(`Computador ${value} agendado para o horário de ${horario}`)
+            return
+        }
+    }
+    if (wrong) alert("Usuário inválido!")
+
 }
 
 function logout() {
@@ -154,6 +173,7 @@ function createHours() {
             element.innerText = `${formattedHour}:${formattedMin}`;
             hora1.appendChild(element);
         }
+        minOffset = 0;
     }
 
 }

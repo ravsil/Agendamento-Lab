@@ -102,6 +102,18 @@ fastify.get('/get-computers', async (request, reply) => {
     }
 });
 
+fastify.get('/get-key', async (request, reply) => {
+    try {
+        // Read the file from the disk
+        const fileData = await fs.promises.readFile('key.json', 'utf8');
+
+        // Return the file data as a JSON object
+        return JSON.parse(fileData);
+    } catch (error) {
+        console.error('Error reading file:', error);
+        reply.status(500).send({ success: false, message: 'Failed to read file' });
+    }
+});
 
 fastify.post('/add-user', async (request, reply) => {
     let email = request.body.email
@@ -120,6 +132,24 @@ fastify.post('/add-user', async (request, reply) => {
             db.run("INSERT INTO Usuario(email, ocupacao) VALUES(?,'aluno')", [email]);
         }
     });
+});
+
+fastify.get('/get-users', async (request, reply) => {
+    try {
+        const rows = await new Promise((resolve, reject) => {
+            db.all('SELECT * FROM Usuario', (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+        reply.send(rows);
+    } catch (err) {
+        console.error(err);
+        reply.status(500).send({ error: 'Database error' });
+    }
 });
 
 fastify.post('/save-file', async (request, reply) => {
