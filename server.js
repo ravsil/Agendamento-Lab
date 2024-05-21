@@ -71,6 +71,10 @@ fastify.get("/agendamento", function (request, reply) {
     updateData();
 });
 
+fastify.get("/admin", function (request, reply) {
+    reply.view("src/pages/admin.html");
+});
+
 fastify.get('/get-file', async (request, reply) => {
     try {
         // Read the file from the disk
