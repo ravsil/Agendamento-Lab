@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Agendamento</title>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="admin.js"></script>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- Font Awesome -->
-    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://kit.fontawesome.com/5fda9e91d8.js" crossorigin="anonymous"></script>
 
     <!-- Logo -->
     <link rel="icon" href="https://cdn.glitch.global/da38d8b0-49b0-446f-95c2-2967b36af762/logo.png?v=1714602770565">
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="colors.css">
-
 
 </head>
 
@@ -30,39 +28,108 @@
         <div id="buttonDiv"></div>
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="https://cdn.glitch.global/da38d8b0-49b0-446f-95c2-2967b36af762/logo.png?v=1714602770565"
-                    width="50" height="50">
+                <img src="https://cdn.glitch.global/da38d8b0-49b0-446f-95c2-2967b36af762/logo.png?v=1714602770565" width="50" height="50">
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto mr-4">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link" href="/agendamento">Home</a>
                     </li>
                 </ul>
-
             </div>
         </div>
     </nav>
-    <div id="disp"></div>
+
+    <div class="container">
+        <div class="mb-4">
+            <h1 class="display-4">Eventos de Admin</h1>
+            <h4 class="mt-4">Usuários:</h4>
+            <div id="users" class="mt-3">
+                <div class="table-responsive">
+                    <table class="table table-bordered rounded">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Email</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>pedro2425@ufrrj.br</td>
+                                <td class="text-right">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-primary"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Tornar Professor</button>
+                                        <button class="btn btn-danger"><i class="fas fa-trash"></i>&nbsp;&nbsp;Excluir</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>hdd2004@ufrrj.br</td>
+                                <td class="text-right">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-primary"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Tornar Professor</button>
+                                        <button class="btn btn-danger"><i class="fas fa-trash"></i>&nbsp;&nbsp;Excluir</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>rafaelfranca@ufrrj.br</td>
+                                <td class="text-right">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-primary"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Tornar Professor</button>
+                                        <button class="btn btn-danger"><i class="fas fa-trash"></i>&nbsp;&nbsp;Excluir</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>rafaelvsilva@ufrrj.br</td>
+                                <td class="text-right">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-primary"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Tornar Professor</button>
+                                        <button class="btn btn-danger"><i class="fas fa-trash"></i>&nbsp;&nbsp;Excluir</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr class="my-5">
+
+            <h4>Adicionar Aula</h4>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <form>
+                        <div class="form-group">
+                            <label for="hora1">Horário de início:</label>
+                            <select class="form-control" id="hora1" onchange="updateHoraFinal()">
+                                <option value="" selected=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="hora2">Horário final:</label>
+                            <select class="form-control" id="hora2" disabled="true">
+                            </select>
+                        </div>
+                    </form>
+                    <button class="btn btn-primary mt-2" onclick="submit()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap JavaScript e Popper.js -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://accounts.google.com/gsi/client"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="disp.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+
 </body>
 
 </html>
