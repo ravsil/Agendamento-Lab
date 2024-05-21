@@ -19,13 +19,12 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="colors.css">
 
 
 </head>
 
 <body>
-
-
     <!-- Barra de Navegação -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
         <div id="buttonDiv"></div>
@@ -38,32 +37,17 @@
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto mr-4">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                </ul>
+
+            </div>
         </div>
     </nav>
-
-
-    <div class="container" id="container">
-
-        <div class="row">
-            <div class="col-md-12 text-center text-lg-center mb-5">
-                <p class="display-4" id="txt-Principal">Login</p>
-            </div>
-        </div>
-
-        <div class="row justify-content-center align-items-center">
-            <div class="col-md-6 col-10 mt-5 bg-dark " style="height: 225px; border-radius: 30px;">
-                <br>
-                <div id="login-button" class="g_id_signin row justify-content-center align-items-center"
-                    data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with"
-                    data-size="large" data-logo_alignment="left">
-                </div>
-                <div class="row justify-content-center align-items-center">
-                    <a href="disponibilidade" class="btn col-md-6 col-10 mt-5 mt-5 mx-auto bg-light text-dark"
-                        style="font-family: 'Open Sans', sans-serif;" id="1">Verificar Disponibilidade</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="disp"></div>
 
     <!-- Bootstrap JavaScript e Popper.js -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -77,8 +61,8 @@
         crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://accounts.google.com/gsi/client"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
-    <script src="google.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="disp.js"></script>
 </body>
 
 </html>

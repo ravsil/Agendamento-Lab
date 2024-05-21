@@ -71,6 +71,10 @@ fastify.get("/agendamento", function (request, reply) {
     updateData();
 });
 
+fastify.get("/disponibilidade", function (request, reply) {
+    reply.view("src/pages/disp.html");
+});
+
 fastify.get("/admin", function (request, reply) {
     reply.view("src/pages/admin.html");
 });

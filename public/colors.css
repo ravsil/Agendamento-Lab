@@ -16,6 +16,15 @@
     background-color: rgb(219, 200, 100) !important;
 }
 
+.green {
+    background-color: rgb(142, 219, 142) !important;
+}
+
+.green:hover,
+.green:active {
+    background-color: rgb(100, 219, 100) !important;
+}
+
 .white-text {
     color: white !important;
 }
