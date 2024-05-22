@@ -1,42 +1,33 @@
 function isAdmin(admins) {
     for (let i = 0; i < admins.length; i++) {
         if (admins[i].email == localStorage.getItem("email")) {
+            document.getElementsByTagName("body")[0].style.display = "block";
             return;
         }
     }
     window.location.href = "/";
 }
-
+/*
+<button class="btn btn-primary"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Tornar Professor</button>
+<button class="btn btn-danger"><i class="fas fa-trash"></i>&nbsp;&nbsp;Excluir</button>
+*/
 function createButtons(parent) {
     let btn1 = document.createElement("button");
-    btn1.innerHTML = "Excluir usuário";
-    btn1.onclick = function () {
-        alert("Usuário excluído com falha! Ainda não foi implementado");
-    }
     btn1.className = "btn btn-primary";
-    parent.appendChild(btn1);
-    let btn2 = document.createElement("button");
-    btn2.innerHTML = "Tornar Professor";
-    btn2.onclick = function () {
+    btn1.innerHTML = "<i class='fa-solid fa-user-pen'></i>&nbsp;&nbsp;Tornar Professor";
+    btn1.onclick = function () {
         alert("Usuário promovido com falha! Ainda não foi implementado");
     }
-    btn2.className = "btn btn-primary";
+    parent.appendChild(btn1);
+
+    let btn2 = document.createElement("button");
+    btn2.className = "btn btn-danger";
+    btn2.innerHTML = "<i class='fas fa-trash'></i>&nbsp;&nbsp;Excluir";
+    btn2.onclick = function () {
+        alert("Usuário excluído com falha! Ainda não foi implementado");
+    }
     parent.appendChild(btn2);
 }
-
-$.getJSON("/get-users", function (data) {
-    let users = data;
-    isAdmin(users);
-
-    let userList = document.getElementById("users");
-    for (let i = 0; i < users.length; i++) {
-        let item = document.createElement("div");
-        item.value = users[i].email;
-        item.innerText = users[i].email;
-        createButtons(item);
-        userList.appendChild(item);
-    }
-});
 
 function createHours() {
     let hora1 = document.getElementById("hora1")
@@ -85,4 +76,28 @@ function updateHoraFinal() {
     // Último horário
     hora2Select.innerHTML += `<option value="18:00">18:00</option>`;
 }
+
+$.getJSON("/get-users", function (data) {
+    let users = data;
+    isAdmin(users);
+
+    let userList = document.getElementById("users");
+    for (let i = 0; i < users.length; i++) {
+        let item = document.createElement("tr");
+        let email = document.createElement("td");
+
+        email.innerText = users[i].email
+        item.appendChild(email)
+        let td = document.createElement("td");
+        td.className = "text-right";
+        let btnDiv = document.createElement("div");
+        btnDiv.className = "btn-group";
+        btnDiv.role = "group";
+        createButtons(btnDiv);
+        td.appendChild(btnDiv);
+        item.appendChild(td);
+        userList.appendChild(item)
+    }
+});
+
 window.addEventListener('load', createHours);

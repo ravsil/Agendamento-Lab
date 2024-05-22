@@ -5,23 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Agendamento</title>
-
+    <style>
+        body {
+            display: none;
+        }
+    </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="admin.js"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-
     <!-- Font Awesome -->
-    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://kit.fontawesome.com/5fda9e91d8.js" crossorigin="anonymous"></script>
 
     <!-- Logo -->
     <link rel="icon" href="https://cdn.glitch.global/da38d8b0-49b0-446f-95c2-2967b36af762/logo.png?v=1714602770565">
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
-
 
 </head>
 
@@ -41,35 +43,62 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto mr-4">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link" href="/agendamento">Home</a>
                     </li>
                 </ul>
-
             </div>
         </div>
     </nav>
-    <div id="users"></div>
-    <div class="row">Adicionar Aula</div>
-    <div class="container mt-5">
-        <div class="row" style="width: 50%">
-            <div class="col-md-12">
-                <form>
-                    <div class="form-group">
-                        <label for="hora1">Horário de início:</label>
-                        <select class="form-control" id="hora1" onchange="updateHoraFinal()">
-                            <option value="" selected></option>
-                        </select>
-                    </div>
-                </form>
-                <form>
-                    <div class="form-group">
-                        <label for="hora2">Horário final:</label>
-                        <select class="form-control" id="hora2" disabled="true">
-                        </select>
-                    </div>
-                </form>
-                <button class="btn btn-primary" onclick="submit()"
-                    style="margin-top: -0.01rem !important">Salvar</button>
+
+    <div class="container">
+        <div class="mb-4">
+            <h1 class="display-4">Eventos de Admin</h1>
+            <h4 class="mt-4">Usuários:</h4>
+            <div class="mt-3">
+                <div class="table-responsive">
+                    <table class="table table-bordered rounded">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Email</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr class="my-5">
+
+            <h4>Adicionar Aula</h4>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <form>
+                        <div class="form-group">
+                            <label for="hora1">Horário de início:</label>
+                            <select class="form-control" id="hora1" onchange="updateHoraFinal()">
+                                <option value="" selected=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="hora2">Horário final:</label>
+                            <select class="form-control" id="hora2" disabled="true">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dia">Dia:</label>
+                            <select class="form-control" id="dia">
+                                <option value="segunda">Segunda-feira</option>
+                                <option value="terca">Terça-feira</option>
+                                <option value="quarta">Quarta-feira</option>
+                                <option value="quinta">Quinta-feira</option>
+                                <option value="sexta">Sexta-feira</option>
+                            </select>
+                        </div>
+                    </form>
+                    <button class="btn btn-primary mt-2" onclick="submit()">Salvar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -85,8 +114,8 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="https://accounts.google.com/gsi/client"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <script src="admin.js"></script>
 </body>
 
 </html>

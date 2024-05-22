@@ -13,6 +13,20 @@
     transition: transform 0.3s ease, background-color 0.5s ease;
 }
 
+.soft-btn {
+    background-color: rgb(32, 36, 41);
+    margin-bottom: 0.5rem;
+
+}
+
+.soft-btn:hover,
+.soft-btn:active {
+    cursor: pointer;
+    transform: scale(1.1);
+    background-color: rgb(22, 26, 31);
+    transition: transform 0.3s ease, background-color 0.5s ease;
+}
+
 .info {
     display: none;
     position: absolute;

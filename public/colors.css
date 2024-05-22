@@ -25,6 +25,16 @@
     background-color: rgb(100, 219, 100) !important;
 }
 
+.gray {
+    background-color: rgb(220, 220, 220) !important;
+    border-radius: 5%;
+    padding: 1.5rem;
+    padding-top: 2.5em;
+    padding-bottom: 2.5em;
+    margin-bottom: 1rem;
+}
+
+
 .white-text {
     color: white !important;
 }
