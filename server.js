@@ -124,7 +124,7 @@ fastify.get('/get-key', async (request, reply) => {
 });
 
 fastify.post('/add-user', async (request, reply) => {
-    let email = request.body.email
+    const email = request.body.email
 
     db.all('SELECT email FROM Usuario', (err, rows) => {
         if (err) {
@@ -141,6 +141,28 @@ fastify.post('/add-user', async (request, reply) => {
         }
     });
 });
+
+fastify.post('/delete-user', async (request, reply) => {
+    try {
+        // Recupera o email do corpo da solicitação
+        const email = request.body.email;
+        // Deleta o usuário do banco de dados
+        db.run(`DELETE FROM Usuario WHERE email = ?`, [email], function (err) {
+            if (err) {
+                console.error('Erro ao deletar usuário:', err);
+                reply.status(500).send({ success: false, message: 'Erro ao remover usuário.' });
+                return;
+            }
+
+            console.log(`Usuário com email ${email} deletado com sucesso.`);
+            reply.send({ success: true, message: 'Usuário removido com sucesso.' });
+        });
+    } catch (error) {
+        console.error('Erro ao processar requisição:', error);
+        reply.status(500).send({ success: false, message: 'Erro ao processar requisição.' });
+    }
+});
+
 
 fastify.post('/alter-occupation', async (request, reply) => {
     try {

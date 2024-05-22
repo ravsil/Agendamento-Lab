@@ -40,7 +40,24 @@ function createButtons(parent, user) {
     btn2.innerHTML = "<i class='fas fa-trash'></i>&nbsp;&nbsp;Excluir";
     btn2.value = user.email;
     btn2.onclick = function () {
-        alert("Usuário excluído com falha! Ainda não foi implementado");
+        $.ajax({
+            url: '/delete-user',
+            type: 'POST',
+            data: {
+                email: user.email
+                //email: encrypdetEmail
+            },
+            success: function (response) {
+                alert(`Usuário ${user.email} removido!`);
+            },
+            error: function (error) {
+                alert(`[ERRO]!!! ${error}`);
+            }
+        });
+        window.location.href = "/admin";
+    }
+    if (btn2.value == localStorage.getItem("email")) {
+        btn2.disabled = true;
     }
     parent.appendChild(btn2);
 }
