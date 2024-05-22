@@ -69,7 +69,7 @@ function generateComputers() {
         let computers = data;
         document.getElementById("txt-Principal").innerText += ` (${getDate()})`
         let index = 0
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 5; i++) {
             let row = document.createElement("div");
             row.className = "row mb-5 mt-5 justify-content-around";
             for (let j = 0; j < 6; j++) {
@@ -81,36 +81,12 @@ function generateComputers() {
             }
             document.getElementById("container0").appendChild(row);
         }
+        document.getElementsByTagName("body")[0].style.display = "block";
     });
     update();
 }
 
 function submit() {
-    let horas = {
-        '08:00': 0,
-        '08:30': 1,
-        '09:00': 2,
-        '09:30': 3,
-        '10:00': 4,
-        '10:30': 5,
-        '11:00': 6,
-        '11:30': 7,
-        '12:00': 8,
-        '12:30': 9,
-        '13:00': 10,
-        '13:30': 11,
-        '14:00': 12,
-        '14:30': 13,
-        '15:00': 14,
-        '15:30': 15,
-        '16:00': 16,
-        '16:30': 17,
-        '17:00': 18,
-        '17:30': 19,
-        '18:00': 20,
-    }
-    //let hora1 = horas[document.getElementById("hora1").value];
-    //let hora2 = horas[document.getElementById("hora2").value];
     let value = document.getElementById("popup").children[0].value
     let hora1 = document.getElementById("hora1").value.replace(":", "h");
     let hora2 = document.getElementById("hora2").value.replace(":", "h");
@@ -152,24 +128,21 @@ function submit() {
 
 }
 
-function logout() {
-    localStorage.removeItem("name");
-    localStorage.removeItem("email");
-    localStorage.removeItem("time");
-}
-
 function createHours() {
     let hora1 = document.getElementById("hora1")
     let curHour = new Date().getHours();
     let hourOffset = (curHour - 8 > 0) ? curHour - 8 : 0;
     let curMin = new Date().getMinutes();
     let minOffset = (curMin > 30) ? 30 : 0;
+    //let index = 0;
+    //let indexOffset = (hourOffset*2) + (minOffset != 0);
     for (let hour = 8 + hourOffset; hour <= 17; hour++) {
         for (let min = 0 + minOffset; min < 60; min += 30) {
             let formattedHour = ("0" + hour).slice(-2);
             let formattedMin = ("0" + min).slice(-2);
             let element = document.createElement("option");
             element.setAttribute("value", `${formattedHour}:${formattedMin}`);
+            //element.setAttribute("value", index++ + indexOffset);
             element.innerText = `${formattedHour}:${formattedMin}`;
             hora1.appendChild(element);
         }
@@ -208,24 +181,6 @@ function updateHoraFinal() {
 
 window.addEventListener('load', generateComputers);
 window.addEventListener('load', createHours);
-
-window.addEventListener('load', function () {
-    let time = new Date().getTime();
-    if (JSON.parse(localStorage.getItem("time")) + 1000 * 60 * 60 * 8 < time) {
-        logout();
-    };
-
-    let name = localStorage.getItem("name");
-
-    if (name != null) {
-        document.getElementById("hello").innerText = `Olá ${name}!`;
-        let loginLink = document.getElementById("login-link")
-        loginLink.parentNode.removeChild(loginLink)
-    } else {
-        let logoutLink = document.getElementById("logout-link")
-        logoutLink.parentNode.removeChild(logoutLink)
-    }
-})
 
 // fecha o popup quando clica fora dele
 window.onclick = function (event) {

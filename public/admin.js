@@ -1,28 +1,44 @@
 function isAdmin(admins) {
     for (let i = 0; i < admins.length; i++) {
-        if (admins[i].email == localStorage.getItem("email")) {
+        if (admins[i].email == localStorage.getItem("email") && admins[i].ocupacao == "Professor") {
             document.getElementsByTagName("body")[0].style.display = "block";
             return;
         }
     }
     window.location.href = "/";
 }
-/*
-<button class="btn btn-primary"><i class="fa-solid fa-user-pen"></i>&nbsp;&nbsp;Tornar Professor</button>
-<button class="btn btn-danger"><i class="fas fa-trash"></i>&nbsp;&nbsp;Excluir</button>
-*/
-function createButtons(parent) {
+
+function createButtons(parent, user) {
     let btn1 = document.createElement("button");
     btn1.className = "btn btn-primary";
-    btn1.innerHTML = "<i class='fa-solid fa-user-pen'></i>&nbsp;&nbsp;Tornar Professor";
+    let desiredOcupation = (user.ocupacao == "Aluno") ? "Professor" : "Aluno";
+    console.log(desiredOcupation)
+    btn1.value = user.email;
+    btn1.innerHTML = `<i class='fa-solid fa-user-pen'></i>&nbsp;&nbsp;Tornar ${desiredOcupation}`;
     btn1.onclick = function () {
-        alert("Usuário promovido com falha! Ainda não foi implementado");
+        $.ajax({
+            url: '/alter-occupation',
+            type: 'POST',
+            data: {
+                email: user.email,
+                ocupation: desiredOcupation
+                //email: encrypdetEmail
+            },
+            success: function (response) {
+                alert(`O usuário agora é ${desiredOcupation}`);
+            },
+            error: function (error) {
+                alert(`[ERRO]!!! ${error}`);
+            }
+        });
+        window.location.href = "/admin";
     }
     parent.appendChild(btn1);
 
     let btn2 = document.createElement("button");
     btn2.className = "btn btn-danger";
     btn2.innerHTML = "<i class='fas fa-trash'></i>&nbsp;&nbsp;Excluir";
+    btn2.value = user.email;
     btn2.onclick = function () {
         alert("Usuário excluído com falha! Ainda não foi implementado");
     }
@@ -84,16 +100,22 @@ $.getJSON("/get-users", function (data) {
     let userList = document.getElementById("users");
     for (let i = 0; i < users.length; i++) {
         let item = document.createElement("tr");
-        let email = document.createElement("td");
 
+        let email = document.createElement("td");
         email.innerText = users[i].email
         item.appendChild(email)
+
+        let ocupation = document.createElement("td");
+        ocupation.innerText = users[i].ocupacao
+        console.log(users[i])
+        item.appendChild(ocupation)
+
         let td = document.createElement("td");
         td.className = "text-right";
         let btnDiv = document.createElement("div");
         btnDiv.className = "btn-group";
         btnDiv.role = "group";
-        createButtons(btnDiv);
+        createButtons(btnDiv, users[i]);
         td.appendChild(btnDiv);
         item.appendChild(td);
         userList.appendChild(item)

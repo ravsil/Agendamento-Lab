@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Agendamento</title>
+    <style>
+        body {
+            display: none;
+        }
+    </style>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -46,10 +51,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto mr-4">
                     <li class="nav-item active">
-                        <a class="nav-link" href="">Home</a>
-                    </li>
-                    <li class="nav-item active">
                         <a class="nav-link" href="disponibilidade">Disponibilidade</a>
+                    </li>
+                    <li class="nav-item active" id="admin-page">
+                        <a class="nav-link" href="/admin">Admin</a>
                     </li>
                     <li class="nav-item active" id="login-link">
                         <a class="nav-link" href="/">Login</a>
@@ -112,8 +117,9 @@
             crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
-        <script src="scheduledEvents.js"></script>
+        <script src="test.js"></script>
         <script src="script.js"></script>
+        <script src="scheduledEvents.js"></script>
     </div>
 </body>
 

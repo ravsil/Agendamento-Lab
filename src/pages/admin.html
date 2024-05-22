@@ -36,6 +36,8 @@
                 <img src="https://cdn.glitch.global/da38d8b0-49b0-446f-95c2-2967b36af762/logo.png?v=1714602770565"
                     width="50" height="50">
             </a>
+            <div id="hello" class="white-text"></div>
+
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -43,7 +45,16 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto mr-4">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/agendamento">Home</a>
+                        <a class="nav-link" href="/agendamento">Agendamento</a>
+                    </li>
+                    <li class="nav-item active" id="admin-page">
+                        <a class="nav-link" href="/disponibilidade">Disponibilidade</a>
+                    </li>
+                    <li class="nav-item active" id="login-link">
+                        <a class="nav-link" href="/">Login</a>
+                    </li>
+                    <li class="nav-item active" id="logout-link">
+                        <a class="nav-link" onclick="logout()" href="/">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -60,6 +71,7 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th>Email</th>
+                                <th>Ocupação</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -116,6 +128,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
     <script src="admin.js"></script>
+    <script src="preload.js"></script>
 </body>
 
 </html>

@@ -54,12 +54,12 @@ fastify.register(require("@fastify/view"), {
 });
 
 fastify.get("/", function (request, reply) {
-    db.all('SELECT * FROM Computador', (err, rows) => {
+    db.all('SELECT * FROM Usuario', (err, rows) => {
         if (err) {
             console.error(err);
         } else {
             rows.forEach((row) => {
-                console.log(`Id: ${row.patrimonio}\nProcessasdor: ${row.processador}\n\n`);
+                console.log(`Id: ${row.email}\nProcessasdor: ${row.ocupacao}\n\n`);
             });
         }
     });
@@ -137,9 +137,31 @@ fastify.post('/add-user', async (request, reply) => {
                     return
                 }
             }
-            db.run("INSERT INTO Usuario(email, ocupacao) VALUES(?,'aluno')", [email]);
+            db.run("INSERT INTO Usuario(email, ocupacao) VALUES(?,'Aluno')", [email]);
         }
     });
+});
+
+fastify.post('/alter-occupation', async (request, reply) => {
+    try {
+        // Recupera o email do corpo da solicitação
+        const user = request.body;
+        console.log(user);
+        // Atualiza a ocupação do usuário no banco de dados
+        db.run(`UPDATE Usuario SET ocupacao = "${user.ocupation}" WHERE email = ?`, [user.email], function (err) {
+            if (err) {
+                console.error('Erro ao atualizar ocupação:', err);
+                reply.status(500).send({ success: false, message: 'Erro ao atualizar ocupação.' });
+                return;
+            }
+
+            console.log(`Ocupação atualizada para ${user.ocupation} para o usuário com email ${user.email}.`);
+            reply.send({ success: true, message: 'Ocupação atualizada com sucesso.' });
+        });
+    } catch (error) {
+        console.error('Erro ao processar requisição:', error);
+        reply.status(500).send({ success: false, message: 'Erro ao processar requisição.' });
+    }
 });
 
 fastify.get('/get-users', async (request, reply) => {

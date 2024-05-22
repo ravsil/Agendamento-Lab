@@ -23,7 +23,7 @@ function createTimeBox(index) {
 
             let hourDiv = document.createElement("div");
 
-            if ((curHour < hour) || (curHour == hour && curMin > 30 && min != 0)) {
+            if ((curHour < hour) || (curHour == hour && curMin < 30 && min != 0)) {
                 hourDiv.className = "green grower text-center";
 
             } else {
@@ -42,7 +42,7 @@ function createAll() {
     const pc = JSON.parse(curtUrl.searchParams.get('pc'));
     let root = document.getElementById("root");
     let row;
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < 30; i++) {
         if (pc != null && pc != i) {
             continue;
         }
@@ -56,7 +56,7 @@ function createAll() {
         row.appendChild(col);
 
         let title = document.createElement("h3")
-        title.className = "text-center soft-btn white-text";
+        title.className = "text-center soft-btn  bg-dark white-text rounded";
         title.setAttribute("data-toggle", "collapse");
         title.setAttribute("data-target", `#${i}`);
         title.innerText = `Computador ${i}`;
@@ -67,7 +67,7 @@ function createAll() {
     $.getJSON("/get-file", function (data) {
         agendamentos = data;
         console.log(agendamentos);
-        for (let i = 0; i < 24; i++) {
+        for (let i = 0; i < 30; i++) {
             if (pc != null && pc != i) {
                 continue;
             }
