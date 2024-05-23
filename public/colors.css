@@ -34,6 +34,12 @@
     margin-bottom: 1rem;
 }
 
+.dark-gray {
+    background-color: rgb(182, 182, 182);
+    padding: 0.313rem;
+    border-radius: 10%;
+}
+
 
 .white-text {
     color: white !important;

@@ -1,22 +1,34 @@
-function getDate() {
+function getDate(year = false) {
     let currentDate = new Date();
-    let day = currentDate.getDate()
+    let day = currentDate.getDate();
     if (day < 10) {
-        day = `0${day}`
+        day = `0${day}`;
     }
-    let month = currentDate.getMonth() + 1
+    let month = currentDate.getMonth() + 1;
     if (month < 10) {
-        month = `0${month}`
+        month = `0${month}`;
     }
-    let date = `${day}/${month}`
-    return date
-
+    if (year) {
+        let year = currentDate.getFullYear();
+        let date = `${day}/${month}/${year}`;
+        return date;
+    } else {
+        let date = `${day}/${month}`;
+        return date;
+    }
 }
 
-function setImage() {
+
+
+function setImage(index) {
     let img = document.createElement("img");
     img.setAttribute("src", "https://cdn.glitch.global/da38d8b0-49b0-446f-95c2-2967b36af762/pc.png?v=1714602850340");
+
+
     img.className = "img-fluid grower";
+    img.onclick = function () {
+        window.location.href = `/disponibilidade?pc=${index}`
+    }
     return img;
 }
 
@@ -58,13 +70,34 @@ function setItem(img, info, btn, index) {
     item.appendChild(img);
     item.appendChild(info);
     item.appendChild(btn);
-    item.onclick = function () {
-        console.log("hello world")
-    }
     return item;
 }
 
 function generateComputers() {
+    let horas = {
+        '08:00': 1,
+        '08:30': 2,
+        '09:00': 3,
+        '09:30': 4,
+        '10:00': 5,
+        '10:30': 6,
+        '11:00': 7,
+        '11:30': 8,
+        '12:00': 9,
+        '12:30': 10,
+        '13:00': 11,
+        '13:30': 12,
+        '14:00': 13,
+        '14:30': 14,
+        '15:00': 15,
+        '15:30': 16,
+        '16:00': 17,
+        '16:30': 18,
+        '17:00': 19,
+        '17:30': 20,
+        '18:00': 21,
+    }
+
     $.getJSON("/get-computers", function (data) {
         let computers = data;
         document.getElementById("txt-Principal").innerText += ` (${getDate()})`
@@ -72,60 +105,152 @@ function generateComputers() {
         for (let i = 0; i < 5; i++) {
             let row = document.createElement("div");
             row.className = "row mb-5 mt-5 justify-content-around";
+            document.getElementById("container0").appendChild(row);
             for (let j = 0; j < 6; j++) {
-                let img = setImage();
+                let img = setImage(computers[i * 6 + j].patrimonio);
                 let info = setInfo(computers[i * 6 + j]);
                 let btn = addBtn(computers[i * 6 + j].patrimonio);
                 let item = setItem(img, info, btn, computers[i * 6 + j].patrimonio);
                 row.appendChild(item);
+                $.ajax({
+                    url: '/get-schedule',
+                    type: 'POST',
+                    data: {
+                        pcId: computers[i * 6 + j].patrimonio,
+                        date: getDate(true)
+                    },
+                    success: function (response) {
+                        let hora = new Date().getHours()
+                        let minuto = new Date().getMinutes()
+                        hora = (hora < 10) ? `0${hora}` : `${hora}`
+                        minuto = (minuto < 30) ? "00" : "30"
+                        let horaAtual = `${hora}:${minuto}`
+                        let horarios = {};
+                        for (let k = 1; k <= 21; k++) {
+                            horarios[k] = null;
+                        }
+                        for (let k = 0; k < response.length; k++) {
+                            for (let l = response[k].id_inicio; l < response[k].id_fim; l++) {
+                                horarios[l] = response[k].email
+                            }
+                        }
+                        if (horarios[horas[horaAtual]]) {
+                            let id = computers[i * 6 + j].patrimonio
+                            document.getElementById(id).children[0].className = "img-fluid grower red"
+                            document.getElementById(id).children[1].innerText = `Computador ${id}\nMemória RAM: 16GB\nProcessador: Ryzen 5600g\nAgendado: ${horarios[horas[horaAtual]].split('@')[0]}`
+                        }
+                    },
+                    error: function (error) {
+                        alert(`[ERRO]!!! ${error}`);
+                    }
+                });
             }
-            document.getElementById("container0").appendChild(row);
         }
         document.getElementsByTagName("body")[0].style.display = "block";
     });
-    update();
+}
+
+function agendar(email, pcId, start, end) {
+    $.ajax({
+        url: '/schedule',
+        type: 'POST',
+        data: {
+            email: email,
+            pcId: pcId,
+            start: start,
+            end: end,
+            date: getDate(true)
+        },
+        success: function (response) {
+            alert(`Computador ${pcId} agendado com sucesso!`)
+            window.location.href = "/agendamento"
+        },
+        error: function (error) {
+            alert(`[ERRO]!!! ${error}`);
+        }
+    });
 }
 
 function submit() {
     let value = document.getElementById("popup").children[0].value
-    let hora1 = document.getElementById("hora1").value.replace(":", "h");
-    let hora2 = document.getElementById("hora2").value.replace(":", "h");
+    let hora1 = document.getElementById("hora1").value;
+    let hora2 = document.getElementById("hora2").value;
     let horario = `${hora1}-${hora2}`
-
+    let horas = {
+        '08:00': 1,
+        '08:30': 2,
+        '09:00': 3,
+        '09:30': 4,
+        '10:00': 5,
+        '10:30': 6,
+        '11:00': 7,
+        '11:30': 8,
+        '12:00': 9,
+        '12:30': 10,
+        '13:00': 11,
+        '13:30': 12,
+        '14:00': 13,
+        '14:30': 14,
+        '15:00': 15,
+        '15:30': 16,
+        '16:00': 17,
+        '16:30': 18,
+        '17:00': 19,
+        '17:30': 20,
+        '18:00': 21,
+    }
     document.getElementById("popup").style.display = "none";
-
-    let wrong = true
-    let users;
-    let agendamentos;
-    $.getJSON("/get-users", function (user) {
-        users = user;
-        $.getJSON("/get-file", function (data) {
-            agendamentos = data;
-            // let email;
-            // $.getJSON("/get-key", function (key) {
-            //     email = CryptoJS.AES.decrypt(encryptedData, key.key).toString(CryptoJS.enc.Utf8);
-            // });
-            for (let i = 0; i < users.length; i++) {
-                // if (users[i].email == email) {
-                if (users[i].email == localStorage.getItem("email")) {
-                    document.getElementById(`btn_${value}`).disabled = true;
-                    agendamentos[value].horarios.push(horario);
-                    agendamentos[value].users.push(localStorage.getItem("email"));
-                    console.log("agendamentos", agendamentos);
-
-                    $.post("/save-file", { "body": JSON.stringify(agendamentos) }, function (response) {
-                        console.log(response);
-                    });
-                    update();
-                    wrong = false
-                    alert(`Computador ${value} agendado para o horário de ${horario}`)
-                    return
+    $.ajax({
+        url: '/get-schedule',
+        type: 'POST',
+        data: {
+            pcId: value,
+            date: getDate(true)
+        },
+        success: function (response) {
+            let horarios = {};
+            console.log(response)
+            for (let i = 1; i <= 21; i++) {
+                horarios[i] = true;
+            }
+            for (let i = 0; i < response.length; i++) {
+                for (let k = response[i].id_inicio; k < response[i].id_fim; k++) {
+                    horarios[k] = false
                 }
             }
-        });
-    });
-    //if (wrong) alert("Usuário inválido!")
+            console.log(horarios)
+            let indisponivel = false;
+            for (let i = horas[hora1]; i < horas[hora2]; i++) {
+                if (!horarios[i]) {
+                    indisponivel = true;
+                    break;
+                }
+            }
+            if (!horarios[horas[hora1]] || !horarios[horas[hora2]] || indisponivel) {
+                alert("Já existe um agendamento neste horário")
+            } else {
+                $.getJSON("/get-users", function (user) {
+                    let users = user;
+                    let isUserOk = false;
+                    for (let i = 0; i < users.length; i++) {
+                        if (users[i].email == localStorage.getItem("email")) {
+                            isUserOk = true;
+                            break;
+                        }
+                    }
+                    if (isUserOk) {
+                        agendar(localStorage.getItem("email"), value, horas[hora1], horas[hora2])
+                    } else {
+                        alert("Usuário Inválido, não é possível agendar")
+                    }
+                });
+            }
 
+        },
+        error: function (error) {
+            alert(`[ERRO]!!! ${error}`);
+        }
+    });
 }
 
 function createHours() {

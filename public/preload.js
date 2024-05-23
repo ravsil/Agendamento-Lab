@@ -27,9 +27,12 @@ window.addEventListener('load', function () {
     $.getJSON("/get-users", function (data) {
         let users = data;
         for (let i = 0; i < users.length; i++) {
-            if (users[i].email == localStorage.getItem("email") && users[i].ocupacao != "Professor") {
+            if (users[i].email == localStorage.getItem("email") && users[i].ocupacao != "Professor" || localStorage.getItem("email") == null) {
                 let adminPage = document.getElementById("admin-page")
-                adminPage.parentNode.removeChild(adminPage);
+                if (adminPage) {
+                    adminPage.parentNode.removeChild(adminPage);
+                }
+
             }
         }
     });

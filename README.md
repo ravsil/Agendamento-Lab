@@ -13,8 +13,11 @@ Frequentemente, o laboratório é utilizado para aulas ou fica lotado durante os
   - [X] Sistema de agendamento
   - [X] Salvar as alterações
 - [X] Página de administração
+  - [X] Adicionar Professores
+  - [X] Remover Professores
+  - [ ] Adicionar Aula
 - [X] Página do histórico de agendamentos
 - [X] Estado atual dos computadores
   - [X] Modo reservado
   - [X] Modo aula
-- [ ] Banco de dados de informações
+- [X] Banco de dados de informações

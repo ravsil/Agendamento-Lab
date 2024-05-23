@@ -54,12 +54,12 @@ fastify.register(require("@fastify/view"), {
 });
 
 fastify.get("/", function (request, reply) {
-    db.all('SELECT * FROM Usuario', (err, rows) => {
+    db.all('SELECT * FROM Agendamento', (err, rows) => {
         if (err) {
             console.error(err);
         } else {
             rows.forEach((row) => {
-                console.log(`Id: ${row.email}\nProcessasdor: ${row.ocupacao}\n\n`);
+                console.log(`${row.email}\n${row.computador_patrimonio}\n${row.id_inicio}\n${row.id_fim}\n${row.data}\n`);
             });
         }
     });
@@ -183,6 +183,53 @@ fastify.post('/alter-occupation', async (request, reply) => {
     } catch (error) {
         console.error('Erro ao processar requisição:', error);
         reply.status(500).send({ success: false, message: 'Erro ao processar requisição.' });
+    }
+});
+
+fastify.post('/schedule', async (request, reply) => {
+    try {
+        const data = request.body;
+        const email = data.email
+        const pcId = data.pcId
+        const time = [JSON.parse(data.start), JSON.parse(data.end), data.date]
+
+        // Atualiza a ocupação do usuário no banco de dados
+        db.run(`INSERT INTO Agendamento (email, computador_patrimonio, id_inicio, id_fim, data) VALUES (?,?,?,?,?)`, [email, pcId, time[0], time[1], time[2]], function (err) {
+            if (err) {
+                console.error('Erro ao agendar:', err);
+                reply.status(500).send({ success: false, message: 'Erro ao atualizar ocupação.' });
+                return;
+            }
+
+            console.log(`Computador ${pcId} agendado para o horario de id ${time[0]} até ${time[1]} no dia ${time[2]} pelo usuário ${email}`);
+            reply.send({ success: true, message: `Computador ${pcId} agendado para o horario de id ${time[0]} até ${time[1]} no dia ${time[2]} pelo usuário ${email}` });
+        });
+    } catch (error) {
+        console.error('Erro ao processar requisição:', error);
+        reply.status(500).send({ success: false, message: 'Erro ao processar requisição.' });
+    }
+});
+
+fastify.post('/get-schedule', async (request, reply) => {
+    try {
+        const rows = await new Promise((resolve, reject) => {
+            const data = request.body;
+            const date = data.date
+            const pcId = data.pcId
+            // Atualiza a ocupação do usuário no banco de dados
+            db.all('SELECT * FROM Agendamento WHERE data = ? AND computador_patrimonio = ?', [date, pcId], (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+        //reply.send(["hello world"])
+        reply.send(rows);
+    } catch (err) {
+        console.error(err);
+        reply.status(500).send({ error: 'Database error' });
     }
 });
 

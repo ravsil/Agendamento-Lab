@@ -1,3 +1,23 @@
+function getDate(year = false) {
+    let currentDate = new Date();
+    let day = currentDate.getDate();
+    if (day < 10) {
+        day = `0${day}`;
+    }
+    let month = currentDate.getMonth() + 1;
+    if (month < 10) {
+        month = `0${month}`;
+    }
+    if (year) {
+        let year = currentDate.getFullYear();
+        let date = `${day}/${month}/${year}`;
+        return date;
+    } else {
+        let date = `${day}/${month}`;
+        return date;
+    }
+}
+
 function createTimeBox(index) {
     let anchor = document.createElement("div");
     anchor.className = "gray collapse";
@@ -6,7 +26,6 @@ function createTimeBox(index) {
     let curHour = new Date().getHours();
     let curMin = new Date().getMinutes();
     let line;
-
     for (let hour = 8; hour <= 17; hour++) {
         if (hour % 2 == 0) {
             line = document.createElement("div");
@@ -23,11 +42,11 @@ function createTimeBox(index) {
 
             let hourDiv = document.createElement("div");
 
-            if ((curHour < hour) || (curHour == hour && curMin < 30 && min != 0)) {
+            if ((curHour < hour) || (curHour == hour && curMin < 30 && min != 0) || (curHour == hour && curMin < 60 && min != 0)) {
                 hourDiv.className = "green grower text-center";
 
             } else {
-                hourDiv.className = "red grower text-center";
+                hourDiv.className = "dark-gray text-center";
             }
             hourDiv.id = `${index}_${formattedHour}:${formattedMin}`
             hourDiv.innerText = `${formattedHour}:${formattedMin}`;
@@ -63,36 +82,57 @@ function createAll() {
         col.appendChild(title);
         col.appendChild(createTimeBox(i));
     }
-    let agendamentos;
-    $.getJSON("/get-file", function (data) {
-        agendamentos = data;
-        console.log(agendamentos);
-        for (let i = 0; i < 30; i++) {
-            if (pc != null && pc != i) {
-                continue;
-            }
-            for (let j = 0; j < agendamentos[i]['horarios'].length; j++) {
-                let hora = agendamentos[i]['horarios'][j].split("-")[0].replace("h", ":")
-                let horaFinal = agendamentos[i]['horarios'][j].split("-")[1].replace("h", ":")
-                horaFinal = `${i}_${horaFinal}`
-                if (hora.split(":")[0] > 18) {
-                    continue;
-                } else {
-                    let id = `${i}_${hora}`
-                    let h = JSON.parse(hora.split(":")[0])
-                    let m = hora.split(":")[1]
-                    while (id != horaFinal) {
+    let horas = {
+        1: '08:00',
+        2: '08:30',
+        3: '09:00',
+        4: '09:30',
+        5: '10:00',
+        6: '10:30',
+        7: '11:00',
+        8: '11:30',
+        9: '12:00',
+        10: '12:30',
+        11: '13:00',
+        12: '13:30',
+        13: '14:00',
+        14: '14:30',
+        15: '15:00',
+        16: '15:30',
+        17: '16:00',
+        18: '16:30',
+        19: '17:00',
+        20: '17:30',
+        21: '18:00'
+    }
+
+    for (let i = 0; i < 30; i++) {
+        $.ajax({
+            url: '/get-schedule',
+            type: 'POST',
+            data: {
+                pcId: i,
+                date: getDate(true)
+            },
+            success: function (response) {
+                for (let index = 0; index < response.length; index++) {
+                    let id = `${i}_${horas[response[index].id_inicio]}`;
+                    let h = JSON.parse(horas[response[index].id_inicio].split(":")[0])
+                    let m = horas[response[index].id_inicio].split(":")[1]
+                    while (id != `${i}_${horas[response[index].id_fim]}`) {
                         console.log(id)
-                        document.getElementById(id).className = "red grower text-center";
+                        document.getElementById(id).className = (document.getElementById(id).className == "dark-gray text-center") ? "dark-gray text-center" : "red grower text-center";
                         m = (m == "00") ? "30" : "00";
                         h = (m == "30") ? h : h + 1;
                         id = (h > 9) ? `${i}_${h}:${m}` : `${i}$0{h}:${m}`
                     }
-
                 }
+            },
+            error: function (error) {
+                alert(`[ERRO]!!! ${error}`);
             }
-        }
-    });
+        });
+    }
     document.getElementsByTagName("body")[0].style.display = "block";
 }
 
