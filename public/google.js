@@ -25,17 +25,11 @@ function handleCredentialResponse(response) {
             alert("Utilize um e-mail da UFRRJ para fazer login");
             return;
         }
-
-        // let encryptedEmail;
-        // $.getJSON("/get-key", function (key) {
-        //     encryptedEmail = CryptoJS.AES.encrypt(credentials.email, key.key).toString();
-        // });
         $.ajax({
             url: '/add-user',
             type: 'POST',
             data: {
                 email: credentials.email
-                //email: encrypdetEmail
             },
             success: function (response) {
                 console.log('Usuário adicionado com sucesso:', response);
@@ -46,7 +40,6 @@ function handleCredentialResponse(response) {
         });
         let name = credentials.given_name.charAt(0).toUpperCase() + credentials.given_name.slice(1).toLowerCase();
         localStorage.setItem("email", credentials.email);
-        //localStorage.setItem("email", encryptedEmail);
         localStorage.setItem("name", name);
         localStorage.setItem("time", new Date().getTime());
         window.location.href = "/agendamento";

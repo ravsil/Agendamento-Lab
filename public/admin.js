@@ -12,7 +12,6 @@ function createButtons(parent, user) {
     let btn1 = document.createElement("button");
     btn1.className = "btn btn-primary";
     let desiredOcupation = (user.ocupacao == "Aluno") ? "Professor" : "Aluno";
-    console.log(desiredOcupation)
     btn1.value = user.email;
     btn1.innerHTML = `<i class='fa-solid fa-user-pen'></i>&nbsp;&nbsp;Tornar ${desiredOcupation}`;
     btn1.onclick = function () {
@@ -124,7 +123,6 @@ $.getJSON("/get-users", function (data) {
 
         let ocupation = document.createElement("td");
         ocupation.innerText = users[i].ocupacao
-        console.log(users[i])
         item.appendChild(ocupation)
 
         let td = document.createElement("td");
