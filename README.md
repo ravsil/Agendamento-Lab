@@ -4,7 +4,7 @@ O objetivo deste projeto é desenvolver um sistema de agendamento para os comput
 
 Frequentemente, o laboratório é utilizado para aulas ou fica lotado durante os horários de pico, e essa informação não está disponível de forma acessível. O propósito deste projeto é solucionar essa questão.
 
-# TO-DO
+# Funcionalidades
 
 - [X] Página com todos os computadores
 - [X] Página inicial
