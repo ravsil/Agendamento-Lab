@@ -37,3 +37,33 @@ function getIndexHour(index) {
     hour = `${h}:${m}`;
     return hour;
 }
+
+function formatString(str) {
+    if (typeof str !== 'string') {
+        return;
+    }
+
+    let result = '';
+    let count = 0;
+    let words = str.split(' ');
+
+    for (let i = 0; i < words.length; i++) {
+        if (count + words[i].length <= 17) {
+            result += words[i];
+            count += words[i].length;
+        } else {
+            result += '\n' + words[i];
+            count = words[i].length;
+        }
+
+        if (i < words.length - 1 && count + 1 <= 17) {
+            result += ' ';
+            count++;
+        } else if (i < words.length - 1) {
+            result += '\n';
+            count = 0;
+        }
+    }
+
+    return result;
+}

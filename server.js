@@ -1,5 +1,4 @@
 const path = require("path");
-const fs = require("fs")
 const sqlite = require("sqlite3");
 const fastify = require("fastify")({
     logger: false,
@@ -98,6 +97,55 @@ fastify.post('/get-schedule', async (request, reply) => {
     }
 });
 
+fastify.get('/get-class', async (request, reply) => {
+    const daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+    const date = new Date(); // Obtém a data atual
+    const dayIndex = date.getDay();
+    let day = daysOfWeek[dayIndex];
+    if (day == "Domingo" || day == "Sábado") {
+        return;
+    }
+    try {
+        const rows = await new Promise((resolve, reject) => {
+            db.all(`SELECT * FROM Aula WHERE dia_semana = ?`, [day], (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+        console.log(rows)
+        reply.send(rows);
+    } catch (err) {
+        console.error(err);
+        reply.status(500).send({ error: 'Database error' });
+    }
+});
+
+fastify.post('/get-class-admin', async (request, reply) => {
+    try {
+        const rows = await new Promise((resolve, reject) => {
+            const data = request.body;
+            const day = data.day
+            // Atualiza a ocupação do usuário no banco de dados
+            db.all(`SELECT * FROM Aula WHERE dia_semana = ?`, [day], (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+        //reply.send(["hello world"])
+        reply.send(rows);
+
+    } catch (err) {
+        console.error(err);
+        reply.status(500).send({ error: 'Database error' });
+    }
+});
+
 fastify.post('/add-user', async (request, reply) => {
     const email = request.body.email
 
@@ -134,6 +182,30 @@ fastify.post('/delete-user', async (request, reply) => {
     }
 });
 
+fastify.post('/delete-class', async (request, reply) => {
+    try {
+        // Recupera o email do corpo da solicitação
+        const data = request.body;
+        const email = data.email
+        const start = data.id_inicio
+        const end = data.id_fim
+        const day = data.dia_semana
+        // Deleta o usuário do banco de dados
+        db.run(`DELETE FROM Aula WHERE email = ? AND id_inicio = ? AND id_fim = ? AND dia_semana = ?`, [email, start, end, day], function (err) {
+            if (err) {
+                console.error('Erro ao deletar Aula:', err);
+                reply.status(500).send({ success: false, message: 'Erro ao remover Aula.' });
+                return;
+            }
+
+            console.log(`Aula deletada com sucesso.`);
+            reply.send({ success: true, message: 'Aula removida com sucesso.' });
+        });
+    } catch (error) {
+        console.error('Erro ao processar requisição:', error);
+        reply.status(500).send({ success: false, message: 'Erro ao processar requisição.' });
+    }
+});
 
 fastify.post('/alter-occupation', async (request, reply) => {
     try {
@@ -170,6 +242,40 @@ fastify.post('/schedule', async (request, reply) => {
 
             console.log(`Computador ${pcId} agendado para o horario de id ${time[0]} até ${time[1]} no dia ${time[2]} pelo usuário ${email}`);
             reply.send({ success: true, message: `Computador ${pcId} agendado para o horario de id ${time[0]} até ${time[1]} no dia ${time[2]} pelo usuário ${email}` });
+        });
+    } catch (error) {
+        console.error('Erro ao processar requisição:', error);
+        reply.status(500).send({ success: false, message: 'Erro ao processar requisição.' });
+    }
+});
+
+fastify.post('/schedule-class', async (request, reply) => {
+    try {
+        const data = request.body;
+        const email = data.email
+        const time = [JSON.parse(data.start), JSON.parse(data.end), data.date]
+        const desc = data.description
+        let days = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"];
+        let ok = false;
+        for (let i = 0; i < 5; i++) {
+            if (data.date == days[i]) {
+                ok = true;
+            }
+        }
+        if (!ok) {
+            throw "Value Error";
+        }
+        console.log(email, time)
+        // Atualiza a ocupação do usuário no banco de dados
+        db.run(`INSERT INTO Aula (email, id_inicio, id_fim, dia_semana, descricao) VALUES (?,?,?,?, ?)`, [email, time[0], time[1], time[2], desc], function (err) {
+            if (err) {
+                console.error('Erro ao agendar:', err);
+                reply.status(500).send({ success: false, message: 'Erro ao atualizar ocupação.' });
+                return;
+            }
+
+            console.log(`Aula agendada para o horario de id ${time[0]} até ${time[1]} no dia ${time[2]} pelo usuário ${email}`);
+            reply.send({ success: true, message: `Aula agendada para o horario de id ${time[0]} até ${time[1]} no dia ${time[2]} pelo usuário ${email}` });
         });
     } catch (error) {
         console.error('Erro ao processar requisição:', error);

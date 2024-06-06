@@ -15,7 +15,7 @@ Frequentemente, o laboratório é utilizado para aulas ou fica lotado durante os
 - [X] Página de administração
   - [X] Adicionar Professores
   - [X] Remover Professores
-  - [ ] Adicionar Aula
+  - [X] Adicionar Aula
 - [X] Página do histórico de agendamentos
 - [X] Estado atual dos computadores
   - [X] Modo reservado

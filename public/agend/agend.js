@@ -1,42 +1,55 @@
-function makePcsRed(computers) {
-    $.ajax({
-        url: '/get-schedule',
-        type: 'POST',
-        data: {
-            pcId: computers[i * 6 + j].patrimonio,
-            date: getDate(true)
-        },
-        success: function (response) {
-            let h = new Date().getHours()
-            let m = new Date().getMinutes()
-            h = (h < 10) ? `0${h}` : `${h}`
-            m = (m < 30) ? "00" : "30"
-            let curTime = `${h}:${m}`
-            let hours = {};
-            for (let k = 1; k <= 21; k++) {
-                hours[k] = null;
-            }
-            for (let k = 0; k < response.length; k++) {
-                for (let l = response[k].id_inicio; l < response[k].id_fim; l++) {
-                    hours[l] = response[k].email
+function changePcsColor(computers) {
+    $.getJSON("/get-class", function (classes) {
+        $.ajax({
+            url: '/get-schedule',
+            type: 'POST',
+            data: {
+                pcId: computers[i * 6 + j].patrimonio,
+                date: getDate(true)
+            },
+            success: function (response) {
+                let h = new Date().getHours()
+                let m = new Date().getMinutes()
+                h = (h < 10) ? `0${h}` : `${h}`
+                m = (m < 30) ? "00" : "30"
+                let curTime = `${h}:${m}`
+                let hours = {};
+                for (let k = 1; k <= 21; k++) {
+                    hours[k] = null;
                 }
+                for (let k = 0; k < response.length; k++) {
+                    for (let l = response[k].id_inicio; l < response[k].id_fim; l++) {
+                        hours[l] = response[k].email
+                    }
+                }
+                for (let k = 0; k < classes.length; k++) {
+                    for (let l = classes[k].id_inicio; l < classes[k].id_fim; l++) {
+                        // minor hack to make it add display the class name
+                        hours[l] = `${classes[k].descricao}@Em Aula`;
+                    }
+                }
+                if (hours[getHourIndex(curTime)]) {
+                    let id = computers[i * 6 + j].patrimonio
+                    let name = hours[getHourIndex(curTime)].split('@')
+                    if (name[1] == "Em Aula") {
+                        document.getElementById(id).children[0].className = "img-fluid grower yellow"
+                        document.getElementById(id).children[1].className += " yellow"
+                    } else {
+                        document.getElementById(id).children[0].className = "img-fluid grower red"
+                        document.getElementById(id).children[1].className += " red"
+                    }
+                    document.getElementById(id).children[1].innerText = `Computador ${id}\nMemória RAM: 16GB\nProcessador: Ryzen 5600g\nAgendado: ${name[0]}`
+                }
+            },
+            error: function (error) {
+                alert(`[ERRO]!!! ${error.responseJSON.message}`);
             }
-            if (hours[getHourIndex(curTime)]) {
-                let id = computers[i * 6 + j].patrimonio
-                let name = hours[getHourIndex(curTime)].split('@')[0]
-                document.getElementById(id).children[0].className = "img-fluid grower red"
-                document.getElementById(id).children[1].innerText = `Computador ${id}\nMemória RAM: 16GB\nProcessador: Ryzen 5600g\nAgendado: ${name}`
-            }
-        },
-        error: function (error) {
-            alert(`[ERRO]!!! ${error}`);
-        }
+        });
     });
 }
 
 function generateComputers() {
     document.getElementById("txt-Principal").innerText += ` (${getDate()})`
-
     $.getJSON("/get-computers", function (computers) {
         for (let i = 0; i < 5; i++) {
             let row = document.createElement("div");
@@ -48,7 +61,7 @@ function generateComputers() {
                 let btn = addBtn(computers[i * 6 + j].patrimonio);
                 let item = setItem(img, info, btn, computers[i * 6 + j].patrimonio);
                 row.appendChild(item);
-                makePcsRed(computers)
+                changePcsColor(computers)
             }
         }
         document.getElementsByTagName("body")[0].style.display = "block";
@@ -71,7 +84,7 @@ function agendar(email, pcId, start, end) {
             window.location.href = "/agendamento"
         },
         error: function (error) {
-            alert(`[ERRO]!!! ${error}`);
+            alert(`[ERRO]!!! ${error.responseJSON.message}`);
         }
     });
 }
@@ -127,7 +140,7 @@ function submit() {
             }
         },
         error: function (error) {
-            alert(`[ERRO]!!! ${error}`);
+            alert(`[ERRO]!!! ${error.responseJSON.message}`);
         }
     });
 }

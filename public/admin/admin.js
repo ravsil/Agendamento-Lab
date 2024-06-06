@@ -27,7 +27,7 @@ function createButtons(parent, user) {
                 alert(`O usuário agora é ${desiredOcupation}`);
             },
             error: function (error) {
-                alert(`[ERRO]!!! ${error}`);
+                alert(`[ERRO]!!! ${error.responseJSON.message}`);
             }
         });
         window.location.href = "/admin";
@@ -50,7 +50,7 @@ function createButtons(parent, user) {
                 alert(`Usuário ${user.email} removido!`);
             },
             error: function (error) {
-                alert(`[ERRO]!!! ${error}`);
+                alert(`[ERRO]!!! ${error.responseJSON.message}`);
             }
         });
         window.location.href = "/admin";
@@ -107,6 +107,70 @@ function updateHoraFinal() {
     }
     // Último horário
     hora2Select.innerHTML += `<option value="18:00">18:00</option>`;
+}
+
+function agendar(email, start, end, day, desc) {
+    $.ajax({
+        url: '/schedule-class',
+        type: 'POST',
+        data: {
+            email: email,
+            start: start,
+            end: end,
+            date: day,
+            description: desc
+        },
+        success: function (response) {
+            alert("Aula adicionada com sucesso!")
+            window.location.href = "/admin";
+
+        },
+        error: function (error) {
+            alert(`[ERRO]!!! ${error.responseJSON.message}`);
+        }
+    });
+}
+
+function submit() {
+    let hora1 = document.getElementById("hora1").value;
+    let hora2 = document.getElementById("hora2").value;
+    let day = document.getElementById("dia").value;
+    let desc = document.getElementById("descricao").value;
+
+    $.ajax({
+        url: '/get-class-admin',
+        type: 'POST',
+        data: {
+            day: day
+        },
+        success: function (response) {
+            let horarios = {};
+            for (let i = 1; i <= 21; i++) {
+                horarios[i] = true;
+            }
+            for (let i = 0; i < response.length; i++) {
+                for (let k = response[i].id_inicio; k < response[i].id_fim; k++) {
+                    horarios[k] = false
+                }
+            }
+            let indisponivel = false;
+            for (let i = getHourIndex(hora1); i < getHourIndex(hora2); i++) {
+                if (!horarios[i]) {
+                    indisponivel = true;
+                    break;
+                }
+            }
+            if (!horarios[getHourIndex(hora1)] || !horarios[getHourIndex(hora2)] || indisponivel) {
+                alert("Já existe um agendamento neste horário")
+            } else {
+                agendar(localStorage.getItem("email"), getHourIndex(hora1), getHourIndex(hora2), day, desc);
+            }
+
+        },
+        error: function (error) {
+            alert(`[ERRO]!!! ${error.responseJSON.message}`);
+        }
+    });
 }
 
 $.getJSON("/get-users", function (data) {

@@ -54,6 +54,25 @@
     display: block;
 }
 
+.disp-info {
+    display: none;
+    position: absolute;
+    top: -200%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgb(219, 219, 219);
+    padding: 0.35rem 1.1rem;
+    color: white;
+    border-radius: 0.313rem;
+    white-space: nowrap;
+}
+
+.grower:hover .disp-info,
+.grower:active .disp-info {
+    display: block;
+}
+
+
 button {
     margin: 1.4rem 0.2rem;
     display: flex;
