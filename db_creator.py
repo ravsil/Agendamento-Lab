@@ -2,7 +2,7 @@ import sqlite3
 
 def createDb(insertIntervals=False, insertPcs=False):
     # Conecta ao banco de dados (ou cria um novo se não existir)
-    db = sqlite3.connect('database.db')
+    db = sqlite3.connect('agendamento.db')
     cursor = db.cursor()
 
     # Cria a tabela Usuario
@@ -80,9 +80,10 @@ def createDb(insertIntervals=False, insertPcs=False):
                 cursor.execute("INSERT INTO Computador(patrimonio, processador, placa_de_video, qtd_memoria_ram) VALUES (?, 'Intel Core i3 4100M', 'Integrada', 4)", [i])
 
     db.commit()
-    stmt.close()
+    if insertIntervals:
+        stmt.close()
     cursor.close()
     db.close()
 
 if __name__ == "__main__":
-    createDb()
+    createDb(True, True)
