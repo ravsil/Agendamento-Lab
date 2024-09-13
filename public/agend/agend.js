@@ -1,7 +1,7 @@
 function changePcsColor(computers) {
-    $.getJSON("/get-class", function (classes) {
+    $.getJSON("get-class", function (classes) {
         $.ajax({
-            url: '/get-schedule',
+            url: 'get-schedule',
             type: 'POST',
             data: {
                 pcId: computers[i * 6 + j].patrimonio,
@@ -50,7 +50,7 @@ function changePcsColor(computers) {
 
 function generateComputers() {
     document.getElementById("txt-Principal").innerText += ` (${getDate()})`
-    $.getJSON("/get-computers", function (computers) {
+    $.getJSON("get-computers", function (computers) {
         for (let i = 0; i < 5; i++) {
             let row = document.createElement("div");
             row.className = "row mb-5 mt-5 justify-content-around";
@@ -70,7 +70,7 @@ function generateComputers() {
 
 function agendar(email, pcId, start, end) {
     $.ajax({
-        url: '/schedule',
+        url: 'schedule',
         type: 'POST',
         data: {
             email: email,
@@ -96,7 +96,7 @@ function submit() {
 
     document.getElementById("popup").style.display = "none";
     $.ajax({
-        url: '/get-schedule',
+        url: 'get-schedule',
         type: 'POST',
         data: {
             pcId: value,
@@ -122,7 +122,7 @@ function submit() {
             if (!horarios[getHourIndex(hora1)] || !horarios[getHourIndex(hora2)] || indisponivel) {
                 alert("Já existe um agendamento neste horário")
             } else {
-                $.getJSON("/get-users", function (user) {
+                $.getJSON("get-users", function (user) {
                     let users = user;
                     let isUserOk = false;
                     for (let i = 0; i < users.length; i++) {
