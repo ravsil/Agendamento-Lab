@@ -10,7 +10,7 @@ function parseJwt(token) {
 
 // Inicialize o Google One Tap
 google.accounts.id.initialize({
-    client_id: '435463394698-f22hdgvn8n8qatsst5pg2ss2c8de0to6.apps.googleusercontent.com',
+    client_id: '188559871450-iucm5t55cibl545tiorb83usr8078qgo.apps.googleusercontent.com',
     callback: handleCredentialResponse
 
 });
