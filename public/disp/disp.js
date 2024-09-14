@@ -54,7 +54,7 @@ function createTimeBox(index) {
 
 function turnTimeRed(i) {
     $.ajax({
-        url: '/get-schedule',
+        url: 'get-schedule',
         type: 'POST',
         data: {
             pcId: i,
@@ -90,7 +90,7 @@ function turnTimeRed(i) {
 }
 
 function turnTimeYellow(i) {
-    $.getJSON("/get-class", function (classes) {
+    $.getJSON("get-class", function (classes) {
         for (let index = 0; index < classes.length; index++) {
             let hour = getIndexHour(classes[index].id_inicio)
             let id = `${i}_${hour}`;

@@ -26,7 +26,7 @@ function handleCredentialResponse(response) {
             return;
         }
         $.ajax({
-            url: '/add-user',
+            url: 'add-user',
             type: 'POST',
             data: {
                 email: credentials.email
@@ -42,7 +42,7 @@ function handleCredentialResponse(response) {
         localStorage.setItem("email", credentials.email);
         localStorage.setItem("name", name);
         localStorage.setItem("time", new Date().getTime());
-        window.location.href = "/agendamento";
+        window.location.href = "agendamento";
 
     } else {
         // O usuário não fez login

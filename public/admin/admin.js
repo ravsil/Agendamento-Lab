@@ -16,7 +16,7 @@ function createButtons(parent, user) {
     btn1.innerHTML = `<i class='fa-solid fa-user-pen'></i>&nbsp;&nbsp;Tornar ${desiredOcupation}`;
     btn1.onclick = function () {
         $.ajax({
-            url: '/alter-occupation',
+            url: 'alter-occupation',
             type: 'POST',
             data: {
                 email: user.email,
@@ -30,7 +30,7 @@ function createButtons(parent, user) {
                 alert(`[ERRO]!!! ${error.responseJSON.message}`);
             }
         });
-        window.location.href = "/admin";
+        window.location.href = "admin";
     }
     parent.appendChild(btn1);
 
@@ -40,7 +40,7 @@ function createButtons(parent, user) {
     btn2.value = user.email;
     btn2.onclick = function () {
         $.ajax({
-            url: '/delete-user',
+            url: 'delete-user',
             type: 'POST',
             data: {
                 email: user.email
@@ -53,7 +53,7 @@ function createButtons(parent, user) {
                 alert(`[ERRO]!!! ${error.responseJSON.message}`);
             }
         });
-        window.location.href = "/admin";
+        window.location.href = "admin";
     }
     if (btn2.value == localStorage.getItem("email")) {
         btn2.disabled = true;
@@ -111,7 +111,7 @@ function updateHoraFinal() {
 
 function agendar(email, start, end, day, desc) {
     $.ajax({
-        url: '/schedule-class',
+        url: 'schedule-class',
         type: 'POST',
         data: {
             email: email,
@@ -122,7 +122,7 @@ function agendar(email, start, end, day, desc) {
         },
         success: function (response) {
             alert("Aula adicionada com sucesso!")
-            window.location.href = "/admin";
+            window.location.href = "admin";
 
         },
         error: function (error) {
@@ -138,7 +138,7 @@ function submit() {
     let desc = document.getElementById("descricao").value;
 
     $.ajax({
-        url: '/get-class-admin',
+        url: 'get-class-admin',
         type: 'POST',
         data: {
             day: day
@@ -173,7 +173,7 @@ function submit() {
     });
 }
 
-$.getJSON("/get-users", function (data) {
+$.getJSON("get-users", function (data) {
     let users = data;
     isAdmin(users);
 

@@ -81,7 +81,7 @@ function agendar(email, pcId, start, end) {
         },
         success: function (response) {
             alert(`Computador ${pcId} agendado com sucesso!`)
-            window.location.href = "/agendamento"
+            window.location.href = "agendamento"
         },
         error: function (error) {
             alert(`[ERRO]!!! ${error.responseJSON.message}`);
