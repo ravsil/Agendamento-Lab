@@ -5,7 +5,7 @@ function isAdmin(admins) {
             return;
         }
     }
-    window.location.href = "/";
+    window.location.href = "/agendalab";
 }
 
 function createButtons(parent, user) {

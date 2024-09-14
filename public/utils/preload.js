@@ -13,7 +13,7 @@ window.addEventListener('load', function () {
     let name = localStorage.getItem("name");
 
     if (name != null) {
-        if (window.location.pathname == "") {
+        if (window.location.pathname == "/agendalab") {
             window.location.href = "agendamento";
         }
 
