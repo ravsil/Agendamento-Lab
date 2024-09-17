@@ -148,7 +148,7 @@ function createAll() {
         turnTimeRed(i);
         turnTimeYellow(i);
     }
-    document.getElementsByTagName("body")[0].style.display = "block";
+    document.getElementsByTagName("body")[0].style = "display: block !important;";
 }
 
 

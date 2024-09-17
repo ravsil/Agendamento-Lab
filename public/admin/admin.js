@@ -1,7 +1,7 @@
 function isAdmin(admins) {
     for (let i = 0; i < admins.length; i++) {
         if (admins[i].email == localStorage.getItem("email") && admins[i].ocupacao == "Professor") {
-            document.getElementsByTagName("body")[0].style.display = "block";
+            document.getElementsByTagName("body")[0].style = "display: block !important;";
             return;
         }
     }

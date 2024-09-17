@@ -64,7 +64,7 @@ function generateComputers() {
                 changePcsColor(computers)
             }
         }
-        document.getElementsByTagName("body")[0].style.display = "block";
+        document.getElementsByTagName("body")[0].style = "display: block !important;";
     });
 }
 
