@@ -12,7 +12,7 @@ const db = new sqlite.Database("agendamento.db", sqlite.OPEN_READWRITE, (err) =>
     }
     console.log("Connected to the database.");
 });
-const settings = fs.readFileSync("settings.json");
+const settings = JSON.parse(fs.readFileSync("settings.json"));
 
 
 fastify.register(require("@fastify/static"), {
