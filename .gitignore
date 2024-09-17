@@ -1,1 +1,5 @@
 agendamento.db
+settings.json
+.*
+!.gitignore
+node_modules/

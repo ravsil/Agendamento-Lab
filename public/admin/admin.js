@@ -173,6 +173,26 @@ function submit() {
     });
 }
 
+function update() {
+    let password = document.getElementById("update").value;
+
+    $.ajax({
+        url: 'update',
+        type: 'POST',
+        data: {
+            password: password
+        },
+        success: function (response) {
+            alert(response.message)
+            window.location.href = "admin";
+
+        },
+        error: function (error) {
+            alert(`[ERRO]!!! ${error.responseJSON.message}`);
+        }
+    });
+}
+
 $.getJSON("get-users", function (data) {
     let users = data;
     isAdmin(users);

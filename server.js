@@ -1,3 +1,5 @@
+const fs = require("fs");
+const exec = require("child_process");
 const path = require("path");
 const sqlite = require("sqlite3");
 const fastify = require("fastify")({
@@ -10,6 +12,8 @@ const db = new sqlite.Database("agendamento.db", sqlite.OPEN_READWRITE, (err) =>
     }
     console.log("Connected to the database.");
 });
+const settings = fs.readFileSync("settings.json");
+
 
 fastify.register(require("@fastify/static"), {
     root: path.join(__dirname, "public"),
@@ -283,8 +287,29 @@ fastify.post('/schedule-class', async (request, reply) => {
     }
 });
 
+fastify.post('/update', async (request, reply) => {
+    try {
+        if (request.body.password == settings.password) {
+            exec.exec("git pull", (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`exec error: ${error}`);
+                    return;
+                }
+                console.log(`stdout: ${stdout}`);
+                console.error(`stderr: ${stderr}`);
+            });
+            reply.send({ success: true, message: 'Atualização realizada com sucesso.' });
+        } else {
+            reply.send({ success: false, message: 'Senha incorreta.' });
+        }
+    } catch (error) {
+        console.error('Erro ao processar requisição:', error);
+        reply.status(500).send({ success: false, message: 'Erro ao processar requisição.' });
+    }
+});
+
 fastify.listen(
-    { port: process.env.PORT, host: "0.0.0.0" },
+    { port: settings.port, host: settings.ip },
     function (err, address) {
         if (err) {
             console.error(err);
