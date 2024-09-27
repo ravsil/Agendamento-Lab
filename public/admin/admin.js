@@ -224,7 +224,7 @@ $.getJSON("get-users", function (data) {
 for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
     let days = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"];
     $.ajax({
-        url: '/get-class-admin',
+        url: 'get-class-admin',
         type: 'POST',
         data: {
             day: days[dayIndex]
