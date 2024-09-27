@@ -20,10 +20,10 @@ function getDate(year = false) {
 
 function getHourIndex(hour) {
     let index;
-    h = hour[i].split(":")[0]
+    h = hour.split(":")[0]
     h = (h[0] == "0" ? JSON.parse(h[1]) : JSON.parse(h))
 
-    m = hour[i].split(":")[1]
+    m = hour.split(":")[1]
 
     index = (h - 8) * 2 + (m == "30" ? 1 : 0) + 1
     return index
@@ -38,6 +38,8 @@ function getIndexHour(index) {
     return hour;
 }
 
+// formats the description of a class so that it gets displayed better
+// mainly used in the disp page
 function formatString(str) {
     if (typeof str !== 'string') {
         return;

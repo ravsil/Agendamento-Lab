@@ -221,4 +221,70 @@ $.getJSON("get-users", function (data) {
     }
 });
 
+for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
+    let days = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"];
+    $.ajax({
+        url: '/get-class-admin',
+        type: 'POST',
+        data: {
+            day: days[dayIndex]
+        },
+        success: function (classes) {
+            let classList = document.getElementById("classes");
+            for (let i = 0; i < classes.length; i++) {
+                let item = document.createElement("tr");
+
+                let email = document.createElement("td");
+                email.innerText = classes[i].email
+                item.appendChild(email)
+
+                let time = document.createElement("td");
+                time.innerText = `${getIndexHour(classes[i].id_inicio)}-${getIndexHour(classes[i].id_fim)}`
+                console.log(classes[i])
+                item.appendChild(time)
+
+
+                let weekDay = document.createElement("td");
+                weekDay.innerText = days[dayIndex]
+                item.appendChild(weekDay)
+
+                let desc = document.createElement("td")
+                desc.innerText = classes[i].descricao
+                item.appendChild(desc)
+                classList.appendChild(item)
+
+                let td = document.createElement("td");
+                td.className = "text-right";
+                let delButton = document.createElement("button");
+                delButton.className = "btn btn-danger";
+                delButton.innerHTML = "<i class='fas fa-trash'></i>&nbsp;&nbsp;Excluir";
+                delButton.onclick = function () {
+                    $.ajax({
+                        url: '/delete-class',
+                        type: 'POST',
+                        data: {
+                            email: classes[i].email,
+                            id_inicio: classes[i].id_inicio,
+                            id_fim: classes[i].id_fim,
+                            dia_semana: classes[i].dia_semana
+                        },
+                        success: function (response) {
+                            alert(`Aula removida!`);
+                        },
+                        error: function (error) {
+                            alert(`[ERRO]!!! ${error.responseJSON.message}`);
+                        }
+                    });
+                    window.location.href = "/admin";
+                }
+                td.appendChild(delButton);
+                item.appendChild(td)
+            }
+        },
+        error: function (error) {
+            alert(`[ERRO]!!! ${error.responseJSON.message}`);
+        }
+    });
+}
+
 window.addEventListener('load', createHours);

@@ -100,7 +100,7 @@ function turnTimeYellow(i) {
                 let curElement = document.getElementById(id);
                 if (curElement.className != "dark-gray text-center") {
                     curElement.className = "yellow grower text-center";
-                    curElement.children[0].innerText = "Agendado por:\n" + response[index].email.split("@")[0]
+                    curElement.children[0].innerText = formatString(classes[index].descricao)
                     if (curElement.children[0].className.includes("red")) {
                         curElement.children[0].className = curElement.children[0].className.replace("red", "yellow");
                     } else {
