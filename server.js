@@ -6,6 +6,7 @@ const fastify = require("fastify")({
     logger: false,
 });
 
+// loads the database and the server settings
 const db = new sqlite.Database("agendamento.db", sqlite.OPEN_READWRITE, (err) => {
     if (err) {
         console.error(err.message);
@@ -80,6 +81,7 @@ fastify.get('/get-users', async (request, reply) => {
     }
 });
 
+// route to get all the schedules for a specific computer on a specific day
 fastify.post('/get-schedule', async (request, reply) => {
     try {
         const rows = await new Promise((resolve, reject) => {
@@ -101,12 +103,15 @@ fastify.post('/get-schedule', async (request, reply) => {
     }
 });
 
+
+// route to send the classes of the day
 fastify.get('/get-class', async (request, reply) => {
     const daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
-    const date = new Date(); // Obtém a data atual
+    const date = new Date();
     const dayIndex = date.getDay();
     let day = daysOfWeek[dayIndex];
     if (day == "Domingo" || day == "Sábado") {
+        // nothing should be sent on weekends
         return;
     }
     try {
@@ -127,12 +132,13 @@ fastify.get('/get-class', async (request, reply) => {
     }
 });
 
+// similar to get-class but you can choose the day
+// used to check if the admin user can schedule a class in that day
 fastify.post('/get-class-admin', async (request, reply) => {
     try {
         const rows = await new Promise((resolve, reject) => {
             const data = request.body;
             const day = data.day
-            // Atualiza a ocupação do usuário no banco de dados
             db.all(`SELECT * FROM Aula WHERE dia_semana = ?`, [day], (err, rows) => {
                 if (err) {
                     reject(err);
@@ -141,7 +147,6 @@ fastify.post('/get-class-admin', async (request, reply) => {
                 }
             });
         });
-        //reply.send(["hello world"])
         reply.send(rows);
 
     } catch (err) {
@@ -150,6 +155,7 @@ fastify.post('/get-class-admin', async (request, reply) => {
     }
 });
 
+// route to add a new user to the database
 fastify.post('/add-user', async (request, reply) => {
     const email = request.body.email
 
@@ -167,6 +173,7 @@ fastify.post('/add-user', async (request, reply) => {
     });
 });
 
+// route to remove a user from the database
 fastify.post('/delete-user', async (request, reply) => {
     try {
         const email = request.body.email;
@@ -186,6 +193,7 @@ fastify.post('/delete-user', async (request, reply) => {
     }
 });
 
+// route to remove a class from the database
 fastify.post('/delete-class', async (request, reply) => {
     try {
         // Recupera o email do corpo da solicitação
@@ -211,6 +219,7 @@ fastify.post('/delete-class', async (request, reply) => {
     }
 });
 
+// route to promote an user to admin or demote an admin to user
 fastify.post('/alter-occupation', async (request, reply) => {
     try {
         const user = request.body;
@@ -230,6 +239,7 @@ fastify.post('/alter-occupation', async (request, reply) => {
     }
 });
 
+// route to an user schedule a computer
 fastify.post('/schedule', async (request, reply) => {
     try {
         const data = request.body;
@@ -253,6 +263,8 @@ fastify.post('/schedule', async (request, reply) => {
     }
 });
 
+// route to an admin schedule a class
+// classes are recurrent, if a class is scheduled for a day, it will be scheduled for every week
 fastify.post('/schedule-class', async (request, reply) => {
     try {
         const data = request.body;
@@ -260,6 +272,7 @@ fastify.post('/schedule-class', async (request, reply) => {
         const time = [JSON.parse(data.start), JSON.parse(data.end), data.date]
         const desc = data.description
         let days = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"];
+        // check if the day the class was scheduled is valid
         let ok = false;
         for (let i = 0; i < 5; i++) {
             if (data.date == days[i]) {
@@ -270,7 +283,6 @@ fastify.post('/schedule-class', async (request, reply) => {
             throw "Value Error";
         }
         console.log(email, time)
-        // Atualiza a ocupação do usuário no banco de dados
         db.run(`INSERT INTO Aula (email, id_inicio, id_fim, dia_semana, descricao) VALUES (?,?,?,?, ?)`, [email, time[0], time[1], time[2], desc], function (err) {
             if (err) {
                 console.error('Erro ao agendar:', err);

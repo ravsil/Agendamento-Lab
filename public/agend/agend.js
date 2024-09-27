@@ -1,3 +1,4 @@
+// function to change the computer status to "Em Aula" or "Agendado"
 function changePcsColor(computers) {
     $.getJSON("get-class", function (classes) {
         $.ajax({
