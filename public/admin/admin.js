@@ -8,7 +8,7 @@ function isAdmin(admins) {
     window.location.href = "/agendalab";
 }
 
-function createButtons(parent, user) {
+function createUserButtons(parent, user) {
     let btn1 = document.createElement("button");
     btn1.className = "btn btn-primary";
     let desiredOcupation = (user.ocupacao == "Aluno") ? "Professor" : "Aluno";
@@ -214,7 +214,7 @@ $.getJSON("get-users", function (data) {
         let btnDiv = document.createElement("div");
         btnDiv.className = "btn-group";
         btnDiv.role = "group";
-        createButtons(btnDiv, users[i]);
+        createUserButtons(btnDiv, users[i]);
         td.appendChild(btnDiv);
         item.appendChild(td);
         userList.appendChild(item)
@@ -240,12 +240,11 @@ for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
 
                 let time = document.createElement("td");
                 time.innerText = `${getIndexHour(classes[i].id_inicio)}-${getIndexHour(classes[i].id_fim)}`
-                console.log(classes[i])
                 item.appendChild(time)
 
 
                 let weekDay = document.createElement("td");
-                weekDay.innerText = days[dayIndex]
+                weekDay.innerText = days[dayIndex].slice(0, 3)
                 item.appendChild(weekDay)
 
                 let desc = document.createElement("td")
@@ -253,14 +252,47 @@ for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
                 item.appendChild(desc)
                 classList.appendChild(item)
 
+
                 let td = document.createElement("td");
                 td.className = "text-right";
+
+                let alterButton = document.createElement("button");
+                alterButton.className = "btn btn-primary";
+                let desiredAction = (classes[i].ativo == 1) ? "Desativar" : "Ativar";
+                let icon = (classes[i].ativo == 1) ? "fa-ban" : "fa-check";
+                alterButton.innerHTML = `<i class='fas ${icon}'></i>&nbsp;&nbsp;${desiredAction}`;
+                alterButton.onclick = function () {
+                    $.ajax({
+                        url: 'alter-class',
+                        type: 'POST',
+                        data: {
+                            email: classes[i].email,
+                            id_inicio: classes[i].id_inicio,
+                            id_fim: classes[i].id_fim,
+                            dia_semana: classes[i].dia_semana
+                        },
+                        success: function (response) {
+                            if (classes[i].ativo == 1) {
+                                alert(`Aula desativada!`);
+                            }
+                            else {
+                                alert(`Aula ativada!`);
+                            }
+                        },
+                        error: function (error) {
+                            alert(`[ERRO]!!! ${error.responseJSON.message}`);
+                        }
+                    });
+                    window.location.href = "admin";
+                }
+                td.appendChild(alterButton);
+
                 let delButton = document.createElement("button");
                 delButton.className = "btn btn-danger";
                 delButton.innerHTML = "<i class='fas fa-trash'></i>&nbsp;&nbsp;Excluir";
                 delButton.onclick = function () {
                     $.ajax({
-                        url: '/delete-class',
+                        url: 'delete-class',
                         type: 'POST',
                         data: {
                             email: classes[i].email,
@@ -275,7 +307,7 @@ for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
                             alert(`[ERRO]!!! ${error.responseJSON.message}`);
                         }
                     });
-                    window.location.href = "/admin";
+                    window.location.href = "admin";
                 }
                 td.appendChild(delButton);
                 item.appendChild(td)
