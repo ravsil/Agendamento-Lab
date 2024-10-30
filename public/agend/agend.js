@@ -1,11 +1,11 @@
 // function to change the computer status to "Em Aula" or "Agendado"
-function changePcsColor(computers) {
+function changePcsColor(computer) {
     $.getJSON("get-class", function (classes) {
         $.ajax({
             url: 'get-schedule',
             type: 'POST',
             data: {
-                pcId: computers[i * 6 + j].patrimonio,
+                pcId: computer.patrimonio,
                 date: getDate(true)
             },
             success: function (response) {
@@ -30,7 +30,7 @@ function changePcsColor(computers) {
                     }
                 }
                 if (hours[getHourIndex(curTime)]) {
-                    let id = computers[i * 6 + j].patrimonio
+                    let id = computer.patrimonio
                     let name = hours[getHourIndex(curTime)].split('@')
                     if (name[1] == "Em Aula") {
                         document.getElementById(id).children[0].className = "img-fluid grower yellow"
@@ -62,7 +62,7 @@ function generateComputers() {
                 let btn = addBtn(computers[i * 6 + j].patrimonio);
                 let item = setItem(img, info, btn, computers[i * 6 + j].patrimonio);
                 row.appendChild(item);
-                changePcsColor(computers)
+                changePcsColor(computers[i * 6 + j])
             }
         }
         document.getElementsByTagName("body")[0].style = "display: block !important;";
