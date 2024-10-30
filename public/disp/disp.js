@@ -96,7 +96,7 @@ function turnTimeYellow(i) {
             let id = `${i}_${hour}`;
             let h = (hour.split(":")[0][0] == "0") ? JSON.parse(hour.split(":")[0][1]) : JSON.parse(hour.split(":")[0])
             let m = hour.split(":")[1]
-            while (id != `${i}_${horas[classes[index].id_fim]}`) {
+            while (id != `${i}_${getIndexHour(classes[index].id_fim)}`) {
                 let curElement = document.getElementById(id);
                 if (curElement.className != "dark-gray text-center") {
                     curElement.className = "yellow grower text-center";
