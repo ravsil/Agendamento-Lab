@@ -269,7 +269,8 @@ for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
                             email: classes[i].email,
                             id_inicio: classes[i].id_inicio,
                             id_fim: classes[i].id_fim,
-                            dia_semana: classes[i].dia_semana
+                            dia_semana: classes[i].dia_semana,
+                            ativo: (classes[i].ativo == 1) ? 0 : 1
                         },
                         success: function (response) {
                             if (classes[i].ativo == 1) {

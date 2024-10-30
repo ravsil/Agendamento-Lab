@@ -116,7 +116,7 @@ fastify.get('/get-class', async (request, reply) => {
     }
     try {
         const rows = await new Promise((resolve, reject) => {
-            db.all(`SELECT * FROM Aula WHERE dia_semana = ?`, [day], (err, rows) => {
+            db.all(`SELECT * FROM Aula WHERE dia_semana = ? AND ativo = 1`, [day], (err, rows) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -196,13 +196,11 @@ fastify.post('/delete-user', async (request, reply) => {
 // route to remove a class from the database
 fastify.post('/delete-class', async (request, reply) => {
     try {
-        // Recupera o email do corpo da solicitação
         const data = request.body;
         const email = data.email
         const start = data.id_inicio
         const end = data.id_fim
         const day = data.dia_semana
-        // Deleta o usuário do banco de dados
         db.run(`DELETE FROM Aula WHERE email = ? AND id_inicio = ? AND id_fim = ? AND dia_semana = ?`, [email, start, end, day], function (err) {
             if (err) {
                 console.error('Erro ao deletar Aula:', err);
@@ -212,6 +210,31 @@ fastify.post('/delete-class', async (request, reply) => {
 
             console.log(`Aula deletada com sucesso.`);
             reply.send({ success: true, message: 'Aula removida com sucesso.' });
+        });
+    } catch (error) {
+        console.error('Erro ao processar requisição:', error);
+        reply.status(500).send({ success: false, message: 'Erro ao processar requisição.' });
+    }
+});
+
+// route to activate or deactivate a class
+fastify.post('/alter-class', async (request, reply) => {
+    try {
+        const data = request.body;
+        const email = data.email
+        const start = data.id_inicio
+        const end = data.id_fim
+        const day = data.dia_semana
+        const active = data.ativo
+        db.run(`UPDATE Aula SET ativo = ? WHERE email = ? AND id_inicio = ? AND id_fim = ? AND dia_semana = ?`, [active, email, start, end, day], function (err) {
+            if (err) {
+                console.error('Erro ao alterar Aula:', err);
+                reply.status(500).send({ success: false, message: 'Erro ao alterar Aula.' });
+                return;
+            }
+
+            console.log(`Aula alterada com sucesso.`);
+            reply.send({ success: true, message: 'Aula alterada com sucesso.' });
         });
     } catch (error) {
         console.error('Erro ao processar requisição:', error);
@@ -283,7 +306,7 @@ fastify.post('/schedule-class', async (request, reply) => {
             throw "Value Error";
         }
         console.log(email, time)
-        db.run(`INSERT INTO Aula (email, id_inicio, id_fim, dia_semana, descricao) VALUES (?,?,?,?, ?)`, [email, time[0], time[1], time[2], desc], function (err) {
+        db.run(`INSERT INTO Aula (email, id_inicio, id_fim, dia_semana, descricao, ativo) VALUES (?,?,?,?,?,?)`, [email, time[0], time[1], time[2], desc, 1], function (err) {
             if (err) {
                 console.error('Erro ao agendar:', err);
                 reply.status(500).send({ success: false, message: 'Erro ao atualizar ocupação.' });
@@ -299,6 +322,7 @@ fastify.post('/schedule-class', async (request, reply) => {
     }
 });
 
+// route to update the website's contents
 fastify.post('/update', async (request, reply) => {
     try {
         if (request.body.password == settings.password) {

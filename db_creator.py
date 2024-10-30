@@ -55,6 +55,7 @@ def createDb(insertIntervals=False, insertPcs=False):
             id_fim INTEGER NOT NULL, 
             dia_semana VARCHAR(30),
             descricao VARCHAR(50),
+            ativo INTEGER NOT NULL,
             FOREIGN KEY (email) REFERENCES Usuario (email),
             FOREIGN KEY (id_inicio) REFERENCES Intervalo (id_tempo), 
             FOREIGN KEY (id_fim) REFERENCES Intervalo (id_tempo))
