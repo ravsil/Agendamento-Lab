@@ -14,7 +14,7 @@ function createUserButtons(parent, user) {
     let desiredOcupation = (user.ocupacao == "Aluno") ? "Professor" : "Aluno";
     btn1.value = user.email;
     btn1.innerHTML = `<i class='fa-solid fa-user-pen'></i>&nbsp;&nbsp;Tornar ${desiredOcupation}`;
-    btn1.onclick = function () {
+    btn1.onclick = function() {
         $.ajax({
             url: 'alter-occupation',
             type: 'POST',
@@ -23,10 +23,10 @@ function createUserButtons(parent, user) {
                 ocupation: desiredOcupation
                 //email: encrypdetEmail
             },
-            success: function (response) {
+            success: function(response) {
                 alert(`O usuário agora é ${desiredOcupation}`);
             },
-            error: function (error) {
+            error: function(error) {
                 alert(`[ERRO]!!! ${error.responseJSON.message}`);
             }
         });
@@ -38,7 +38,7 @@ function createUserButtons(parent, user) {
     btn2.className = "btn btn-danger";
     btn2.innerHTML = "<i class='fas fa-trash'></i>&nbsp;&nbsp;Excluir";
     btn2.value = user.email;
-    btn2.onclick = function () {
+    btn2.onclick = function() {
         $.ajax({
             url: 'delete-user',
             type: 'POST',
@@ -46,10 +46,10 @@ function createUserButtons(parent, user) {
                 email: user.email
                 //email: encrypdetEmail
             },
-            success: function (response) {
+            success: function(response) {
                 alert(`Usuário ${user.email} removido!`);
             },
-            error: function (error) {
+            error: function(error) {
                 alert(`[ERRO]!!! ${error.responseJSON.message}`);
             }
         });
@@ -63,12 +63,8 @@ function createUserButtons(parent, user) {
 
 function createHours() {
     let hora1 = document.getElementById("hora1")
-    let curHour = new Date().getHours();
-    let hourOffset = (curHour - 8 > 0) ? curHour - 8 : 0;
-    let curMin = new Date().getMinutes();
-    let minOffset = (curMin > 30) ? 30 : 0;
-    for (let hour = 8 + hourOffset; hour <= 17; hour++) {
-        for (let min = 0 + minOffset; min < 60; min += 30) {
+    for (let hour = 8; hour <= 17; hour++) {
+        for (let min = 0; min < 60; min += 30) {
             let formattedHour = ("0" + hour).slice(-2);
             let formattedMin = ("0" + min).slice(-2);
             let element = document.createElement("option");
@@ -76,7 +72,6 @@ function createHours() {
             element.innerText = `${formattedHour}:${formattedMin}`;
             hora1.appendChild(element);
         }
-        minOffset = 0;
     }
 
 }
@@ -120,12 +115,12 @@ function agendar(email, start, end, day, desc) {
             date: day,
             description: desc
         },
-        success: function (response) {
+        success: function(response) {
             alert("Aula adicionada com sucesso!")
             window.location.href = "admin";
 
         },
-        error: function (error) {
+        error: function(error) {
             alert(`[ERRO]!!! ${error.responseJSON.message}`);
         }
     });
@@ -143,13 +138,13 @@ function submit() {
         data: {
             day: day
         },
-        success: function (response) {
+        success: function(response) {
             let horarios = {};
             for (let i = 1; i <= 21; i++) {
                 horarios[i] = true;
             }
             for (let i = 0; i < response.length; i++) {
-                for (let k = response[i].id_inicio; k < response[i].id_fim; k++) {
+                for (let k = response[i].id_inicio + 1; k < response[i].id_fim; k++) {
                     horarios[k] = false
                 }
             }
@@ -167,7 +162,7 @@ function submit() {
             }
 
         },
-        error: function (error) {
+        error: function(error) {
             alert(`[ERRO]!!! ${error.responseJSON.message}`);
         }
     });
@@ -182,18 +177,18 @@ function update() {
         data: {
             password: password
         },
-        success: function (response) {
+        success: function(response) {
             alert(response.message)
             window.location.href = "admin";
 
         },
-        error: function (error) {
+        error: function(error) {
             alert(`[ERRO]!!! ${error.responseJSON.message}`);
         }
     });
 }
 
-$.getJSON("get-users", function (data) {
+$.getJSON("get-users", function(data) {
     let users = data;
     isAdmin(users);
 
@@ -229,7 +224,7 @@ for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
         data: {
             day: days[dayIndex]
         },
-        success: function (classes) {
+        success: function(classes) {
             let classList = document.getElementById("classes");
             for (let i = 0; i < classes.length; i++) {
                 let item = document.createElement("tr");
@@ -261,7 +256,7 @@ for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
                 let desiredAction = (classes[i].ativo == 1) ? "Desativar" : "Ativar";
                 let icon = (classes[i].ativo == 1) ? "fa-ban" : "fa-check";
                 alterButton.innerHTML = `<i class='fas ${icon}'></i>&nbsp;&nbsp;${desiredAction}`;
-                alterButton.onclick = function () {
+                alterButton.onclick = function() {
                     $.ajax({
                         url: 'alter-class',
                         type: 'POST',
@@ -272,7 +267,7 @@ for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
                             dia_semana: classes[i].dia_semana,
                             ativo: (classes[i].ativo == 1) ? 0 : 1
                         },
-                        success: function (response) {
+                        success: function(response) {
                             if (classes[i].ativo == 1) {
                                 alert(`Aula desativada!`);
                             }
@@ -280,7 +275,7 @@ for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
                                 alert(`Aula ativada!`);
                             }
                         },
-                        error: function (error) {
+                        error: function(error) {
                             alert(`[ERRO]!!! ${error.responseJSON.message}`);
                         }
                     });
@@ -291,7 +286,7 @@ for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
                 let delButton = document.createElement("button");
                 delButton.className = "btn btn-danger";
                 delButton.innerHTML = "<i class='fas fa-trash'></i>&nbsp;&nbsp;Excluir";
-                delButton.onclick = function () {
+                delButton.onclick = function() {
                     $.ajax({
                         url: 'delete-class',
                         type: 'POST',
@@ -301,10 +296,10 @@ for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
                             id_fim: classes[i].id_fim,
                             dia_semana: classes[i].dia_semana
                         },
-                        success: function (response) {
+                        success: function(response) {
                             alert(`Aula removida!`);
                         },
-                        error: function (error) {
+                        error: function(error) {
                             alert(`[ERRO]!!! ${error.responseJSON.message}`);
                         }
                     });
@@ -314,7 +309,7 @@ for (let dayIndex = 0; dayIndex < 5; dayIndex++) {
                 item.appendChild(td)
             }
         },
-        error: function (error) {
+        error: function(error) {
             alert(`[ERRO]!!! ${error.responseJSON.message}`);
         }
     });
