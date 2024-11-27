@@ -70,6 +70,14 @@ function generateComputers() {
 }
 
 function agendar(email, pcId, start, end) {
+    let able = true;
+    for (let i = 0; i < 30; i++) {
+        able = preventMultiSchedule(pcId, email);
+    }
+    if (!able) {
+        alert("Usuário já possui um agendamento neste horário")
+        return
+    }
     $.ajax({
         url: 'schedule',
         type: 'POST',
@@ -83,6 +91,28 @@ function agendar(email, pcId, start, end) {
         success: function (response) {
             alert(`Computador ${pcId} agendado com sucesso!`)
             window.location.href = "agendamento"
+        },
+        error: function (error) {
+            alert(`[ERRO]!!! ${error.responseJSON.message}`);
+        }
+    });
+}
+
+function preventMultiSchedule(i, userEmail) {
+    $.ajax({
+        url: 'get-schedule',
+        type: 'POST',
+        data: {
+            pcId: i,
+            date: getDate(true)
+        },
+        success: function (response) {
+            for (let index = 0; index < response.length; index++) {
+                if (response[index].email == userEmail) {
+                    return false
+                }
+            }
+            return true
         },
         error: function (error) {
             alert(`[ERRO]!!! ${error.responseJSON.message}`);
